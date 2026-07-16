@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="docs/assets/readme-header-1600x400.png" alt="Dane Wisdom — IT Consultant, Solutions Architect, Founder of Wisdom Technologies" width="100%">
-</p>
-
 # Hi, I'm Dane Wisdom
 
 **IT Consultant · Solutions Architect · Founder, Wisdom Technologies**
@@ -31,7 +27,7 @@ I design and implement practical technology solutions across IT advisory, cloud 
 
 This profile is being organized around:
 
-1. A flagship open-source utility for practical IT operations / automation
+1. A flagship open-source utility for practical IT operations and automation
 2. Software-engineering templates and governance files
 3. Cybersecurity and cloud-readiness helpers
 4. Educational reference implementations
@@ -43,6 +39,7 @@ The portfolio is being curated. Repositories will be promoted after they meet ba
 
 ## Connect
 
+- Portfolio: [danwiz.github.io/danwiz](https://danwiz.github.io/danwiz/)
 - GitHub: [@danwiz](https://github.com/danwiz)
 - Email: danewisdom@gmail.com
 - Brand: Dane Wisdom — IT Consultant
