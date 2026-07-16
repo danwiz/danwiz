@@ -41,6 +41,7 @@ The portfolio is being curated. Repositories will be promoted after they meet ba
 
 - Portfolio: [danwiz.github.io/danwiz](https://danwiz.github.io/danwiz/)
 - GitHub: [@danwiz](https://github.com/danwiz)
+- X: [@DaneWisdom](https://x.com/DaneWisdom)
 - Email: danewisdom@gmail.com
 - Brand: Dane Wisdom — IT Consultant
 - Company: Wisdom Technologies
