@@ -1,6 +1,11 @@
+import sys
 import unittest
+from pathlib import Path
 
-from projects.wisdom_it_readiness_toolkit.src.scorer import score_assessment
+SRC_DIR = Path(__file__).resolve().parents[1] / "src"
+sys.path.insert(0, str(SRC_DIR))
+
+from scorer import score_assessment  # noqa: E402
 
 
 ASSESSMENT = {
