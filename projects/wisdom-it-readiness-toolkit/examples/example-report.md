@@ -2,8 +2,8 @@
 
 **Assessment:** WITRT-QUICK-001 v0.1.0  
 **Data:** Synthetic demonstration only  
-**Overall score:** 43.75%  
-**Maturity:** Level 2 — Basic
+**Overall score:** 47.37%  
+**Maturity:** Level 3 — Repeatable
 
 ## Domain results
 
