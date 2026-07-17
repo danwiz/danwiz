@@ -7,44 +7,67 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-LEVELS = {
-    1: "Unprepared",
-    2: "Basic",
-    3: "Repeatable",
-    4: "Managed",
-    5: "Optimized",
-}
-
 
 @dataclass(frozen=True)
 class ScoreResult:
-    overall_score: float
+    overall_percent: float
     maturity_level: int
     maturity_label: str
     domain_scores: dict[str, float]
     unanswered_questions: list[str]
 
 
-def _validate_score(value: Any, question_id: str) -> int:
+def _scale_bounds(assessment: dict[str, Any]) -> tuple[int, int]:
+    scale = assessment.get("scale")
+    if not isinstance(scale, dict) or not scale:
+        raise ValueError("Assessment must define a non-empty scale")
+    try:
+        values = sorted(int(key) for key in scale)
+    except (TypeError, ValueError) as exc:
+        raise ValueError("Scale keys must be integers or integer strings") from exc
+    return values[0], values[-1]
+
+
+def _validate_score(value: Any, question_id: str, minimum: int, maximum: int) -> int:
     if isinstance(value, bool) or not isinstance(value, int):
-        raise ValueError(f"Response for {question_id} must be an integer from 1 to 5")
-    if value not in LEVELS:
-        raise ValueError(f"Response for {question_id} must be between 1 and 5")
+        raise ValueError(
+            f"Response for {question_id} must be an integer from {minimum} to {maximum}"
+        )
+    if not minimum <= value <= maximum:
+        raise ValueError(
+            f"Response for {question_id} must be between {minimum} and {maximum}"
+        )
     return value
 
 
-def score_assessment(assessment: dict[str, Any], responses: dict[str, Any]) -> ScoreResult:
-    """Score a readiness assessment using equal domain and question weights.
+def _maturity_for_percent(assessment: dict[str, Any], percent: float) -> tuple[int, str]:
+    bands = assessment.get("maturity_bands")
+    if not isinstance(bands, list) or not bands:
+        raise ValueError("Assessment must define maturity bands")
+    for band in bands:
+        if band["minimum_percent"] <= percent <= band["maximum_percent"]:
+            return int(band["level"]), str(band["label"])
+    raise ValueError(f"No maturity band covers score {percent}")
 
-    Missing responses are reported and excluded from averages. A completely
-    unanswered assessment is rejected because it cannot produce a meaningful score.
+
+def score_assessment(assessment: dict[str, Any], responses: dict[str, Any]) -> ScoreResult:
+    """Score responses using question weights and return percentage-based maturity.
+
+    Missing responses are reported and excluded from the denominator. This makes
+    partial saves possible while preventing unanswered items from being scored as zero.
     """
     domains = assessment.get("domains")
     if not isinstance(domains, list) or not domains:
         raise ValueError("Assessment must define at least one domain")
 
+    minimum, maximum = _scale_bounds(assessment)
+    if maximum == minimum:
+        raise ValueError("Assessment scale must contain more than one value")
+
     domain_scores: dict[str, float] = {}
     unanswered: list[str] = []
+    overall_earned = 0.0
+    overall_possible = 0.0
 
     for domain in domains:
         domain_id = domain.get("id")
@@ -52,29 +75,40 @@ def score_assessment(assessment: dict[str, Any], responses: dict[str, Any]) -> S
         if not domain_id or not isinstance(questions, list) or not questions:
             raise ValueError("Every domain must have an id and at least one question")
 
-        values: list[int] = []
+        earned = 0.0
+        possible = 0.0
         for question in questions:
             question_id = question.get("id")
             if not question_id:
                 raise ValueError(f"Domain {domain_id} contains a question without an id")
+            weight = question.get("weight", 1)
+            if isinstance(weight, bool) or not isinstance(weight, (int, float)) or weight <= 0:
+                raise ValueError(f"Question {question_id} must have a positive numeric weight")
             if question_id not in responses:
                 unanswered.append(question_id)
                 continue
-            values.append(_validate_score(responses[question_id], question_id))
 
-        if values:
-            domain_scores[domain_id] = round(sum(values) / len(values), 2)
+            score = _validate_score(responses[question_id], question_id, minimum, maximum)
+            normalized = (score - minimum) / (maximum - minimum)
+            earned += normalized * weight
+            possible += weight
 
-    if not domain_scores:
+        if possible:
+            percent = round((earned / possible) * 100, 2)
+            domain_scores[str(domain_id)] = percent
+            overall_earned += earned
+            overall_possible += possible
+
+    if not overall_possible:
         raise ValueError("At least one valid response is required")
 
-    overall = round(sum(domain_scores.values()) / len(domain_scores), 2)
-    maturity_level = min(5, max(1, round(overall)))
+    overall_percent = round((overall_earned / overall_possible) * 100, 2)
+    maturity_level, maturity_label = _maturity_for_percent(assessment, overall_percent)
 
     return ScoreResult(
-        overall_score=overall,
+        overall_percent=overall_percent,
         maturity_level=maturity_level,
-        maturity_label=LEVELS[maturity_level],
+        maturity_label=maturity_label,
         domain_scores=domain_scores,
         unanswered_questions=unanswered,
     )
