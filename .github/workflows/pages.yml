@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Validate site entry point
+        run: test -f docs/index.html
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload static site
