@@ -6,7 +6,7 @@ I design and implement practical technology solutions across IT advisory, cloud 
 
 ## What I’m building
 
-- Practical AI-enabled IT consulting tools and workflows
+- **Wisdom IT Readiness Toolkit** — the first flagship open-source repository, providing practical assessments, checklists, scoring models, and implementation guidance for individuals and small businesses
 - Reusable software-engineering standards, templates, and reference implementations
 - IT operations, cloud, cybersecurity, automation, and digital-workplace utilities
 - Technical documentation systems, GitHub Pages sites, and open-source learning resources
@@ -23,19 +23,17 @@ I design and implement practical technology solutions across IT advisory, cloud 
 - Practical tools that solve real operational problems
 - Systems thinking across people, process, technology, and governance
 
-## GitHub portfolio roadmap
+## Public launch sequence
 
-This profile is being organized around:
-
-1. A flagship open-source utility for practical IT operations and automation
-2. Software-engineering templates and governance files
-3. Cybersecurity and cloud-readiness helpers
-4. Educational reference implementations
-5. GitHub Pages documentation and project case studies
+1. Personal Brand website and GitHub Pages portfolio
+2. Wisdom IT Readiness Toolkit flagship repository
+3. Technology Readiness Quick Check consulting package
+4. Wisdom Technologies company website and broader service catalog
+5. Volume I — The Wisdom Knowledge Engineering Handbook
 
 ## Current status
 
-The portfolio is being curated. Repositories will be promoted after they meet baseline standards for documentation, licensing, security policy, contribution guidance, automation, and maintainability.
+The Personal Brand site is the first public launch surface. Repositories are promoted after meeting baseline standards for documentation, licensing, security policy, contribution guidance, automation, accessibility, and maintainability.
 
 ## Connect
 
