@@ -33,7 +33,7 @@ I design and implement practical technology solutions across IT advisory, cloud 
 
 ## Current status
 
-The Personal Brand site and flagship toolkit repository are public. The toolkit has completed its `v0.1.0` release-candidate CI baseline, including package installation, unit tests, installed CLI scoring, Markdown report generation, report validation, and artifact upload. Final release review and publication are next.
+The Personal Brand site and flagship toolkit repository are public. **Wisdom IT Readiness Toolkit v0.1.0 is now released** following successful validation of package installation, unit tests, installed CLI scoring, Markdown report generation, report validation, and artifact upload.
 
 ## Connect
 
