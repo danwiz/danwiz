@@ -5,9 +5,14 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: profile-ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   validate:
@@ -36,3 +41,15 @@ jobs:
         uses: Cyb3r-Jak3/html5validator-action@v7.2.0
         with:
           root: docs/
+
+      - name: Validate CSS structure
+        run: |
+          test -s docs/styles.css
+          grep -q ':root' docs/styles.css
+          grep -q '@media' docs/styles.css
+
+      - name: Verify Pages links and release references
+        run: |
+          grep -q 'wisdom-it-readiness-toolkit' docs/index.html
+          grep -q 'releases/tag/v0.1.0' docs/index.html
+          grep -q 'mailto:danewisdom@gmail.com' docs/index.html
