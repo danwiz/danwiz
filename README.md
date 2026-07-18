@@ -6,7 +6,7 @@ I design and implement practical technology solutions across IT advisory, cloud 
 
 ## What I’m building
 
-- **Wisdom IT Readiness Toolkit** — the first flagship open-source repository, providing practical assessments, checklists, scoring models, and implementation guidance for individuals and small businesses
+- **[Wisdom IT Readiness Toolkit](https://github.com/danwiz/wisdom-it-readiness-toolkit)** — the first flagship open-source repository, providing practical assessments, weighted scoring, maturity classification, and readiness reporting for individuals and small businesses
 - Reusable software-engineering standards, templates, and reference implementations
 - IT operations, cloud, cybersecurity, automation, and digital-workplace utilities
 - Technical documentation systems, GitHub Pages sites, and open-source learning resources
@@ -33,11 +33,12 @@ I design and implement practical technology solutions across IT advisory, cloud 
 
 ## Current status
 
-The Personal Brand site is the first public launch surface. Repositories are promoted after meeting baseline standards for documentation, licensing, security policy, contribution guidance, automation, accessibility, and maintainability.
+The Personal Brand site and flagship toolkit repository are now public. The toolkit is in `v0.1.0` release-candidate validation with CI, documentation, licensing, security guidance, and contribution standards in place.
 
 ## Connect
 
 - Portfolio: [danwiz.github.io/danwiz](https://danwiz.github.io/danwiz/)
+- Flagship project: [Wisdom IT Readiness Toolkit](https://github.com/danwiz/wisdom-it-readiness-toolkit)
 - GitHub: [@danwiz](https://github.com/danwiz)
 - X: [@DaneWisdom](https://x.com/DaneWisdom)
 - Email: danewisdom@gmail.com
