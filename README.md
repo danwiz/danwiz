@@ -37,7 +37,7 @@ The Personal Brand site and flagship toolkit repository are now public. The tool
 
 ## Connect
 
-- Portfolio: [danwiz.github.io/danwiz](https://danwiz.github.io/danwiz/)
+- GitHub portfolio: [github.com/danwiz](https://github.com/danwiz)
 - Flagship project: [Wisdom IT Readiness Toolkit](https://github.com/danwiz/wisdom-it-readiness-toolkit)
 - GitHub: [@danwiz](https://github.com/danwiz)
 - X: [@DaneWisdom](https://x.com/DaneWisdom)
