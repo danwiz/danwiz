@@ -7,7 +7,7 @@ I design and implement practical technology solutions across IT advisory, cloud 
 ## What I’m building
 
 - **[Wisdom IT Readiness Toolkit](https://github.com/danwiz/wisdom-it-readiness-toolkit)** — the first flagship open-source repository, providing practical assessments, weighted scoring, maturity classification, and readiness reporting for individuals and small businesses
-- **[Sports Management System preservation and modernization](docs/sports-management-system-publication-status.md)** — a verified C++20 modernization of a 2005–2006 academic system, prepared for publication as a standalone repository
+- **[Sports Management System preservation and modernization](https://github.com/danwiz/sports-management-system-legacy)** — a released C++20 modernization and archival preservation of a 2005–2006 academic sports-management system, with seven automated test suites, CI, packaging, provenance controls, and split licensing
 - Reusable software-engineering standards, templates, and reference implementations
 - IT operations, cloud, cybersecurity, automation, and digital-workplace utilities
 - Technical documentation systems, GitHub Pages sites, and open-source learning resources
@@ -35,14 +35,15 @@ I design and implement practical technology solutions across IT advisory, cloud 
 
 ## Current status
 
-The Personal Brand site and flagship toolkit repository are public. **Wisdom IT Readiness Toolkit v0.1.0 is now released** following successful validation of package installation, unit tests, installed CLI scoring, Markdown report generation, report validation, and artifact upload.
+The Personal Brand site and flagship toolkit repository are public. **Wisdom IT Readiness Toolkit v0.1.0 is released** following successful validation of package installation, unit tests, installed CLI scoring, Markdown report generation, report validation, and artifact upload.
 
-The Sports Management System modernization has reached a verified `v0.10.0` publication candidate with seven passing automated test suites, release packaging, provenance controls, and split licensing. Its standalone GitHub repository is the remaining publication dependency.
+**Sports Management System v0.10.0 is released** following a clean GitHub Actions configuration, C++20 build, and successful execution of all seven regression test suites. The repository preserves the historical source separately from the portable modernization and includes release packaging, provenance controls, and explicit licensing boundaries.
 
 ## Connect
 
 - Portfolio: [danwiz.github.io/danwiz](https://danwiz.github.io/danwiz/)
 - Flagship project: [Wisdom IT Readiness Toolkit](https://github.com/danwiz/wisdom-it-readiness-toolkit)
+- Released case study: [Sports Management System v0.10.0](https://github.com/danwiz/sports-management-system-legacy/releases/tag/v0.10.0)
 - GitHub: [@danwiz](https://github.com/danwiz)
 - X: [@DaneWisdom](https://x.com/DaneWisdom)
 - Email: danewisdom@gmail.com
