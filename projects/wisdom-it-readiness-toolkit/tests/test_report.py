@@ -23,7 +23,7 @@ ASSESSMENT = {
 class MarkdownReportTests(unittest.TestCase):
     def test_generates_expected_sections(self):
         result = ScoreResult(
-            overall_score=50.0,
+            overall_percent=50.0,
             maturity_level=3,
             maturity_label="Repeatable",
             domain_scores={"strategy": 75.0, "security": 25.0},
@@ -40,7 +40,7 @@ class MarkdownReportTests(unittest.TestCase):
 
     def test_lists_incomplete_responses(self):
         result = ScoreResult(
-            overall_score=75.0,
+            overall_percent=75.0,
             maturity_level=4,
             maturity_label="Managed",
             domain_scores={"strategy": 75.0},
