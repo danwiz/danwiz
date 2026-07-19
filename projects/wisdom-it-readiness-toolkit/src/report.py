@@ -29,7 +29,7 @@ def generate_markdown_report(
         f"**Subject:** {subject}  ",
         f"**Assessment:** {assessment.get('assessment_id', 'unknown')} v{assessment.get('version', 'unknown')}  ",
         f"**Data:** {data_note}  ",
-        f"**Overall score:** {result.overall_score:.2f}%  ",
+        f"**Overall score:** {result.overall_percent:.2f}%  ",
         f"**Maturity:** Level {result.maturity_level} — {result.maturity_label}",
         "",
         "## Domain results",

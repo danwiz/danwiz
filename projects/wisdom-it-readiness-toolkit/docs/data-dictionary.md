@@ -44,7 +44,7 @@ The response document is a JSON object whose keys are question identifiers and w
 
 | Field | Type | Description |
 |---|---|---|
-| `overall_score` | number | Weighted readiness percentage from 0 to 100. |
+| `overall_percent` | number | Weighted readiness percentage from 0 to 100. |
 | `maturity_level` | integer | Maturity level from 1 to 5. |
 | `maturity_label` | string | Human-readable maturity label. |
 | `domain_scores` | object | Percentage result for each answered domain. |
