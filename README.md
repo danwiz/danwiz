@@ -9,7 +9,7 @@ I design, modernize, and operationalize dependable technology systems. My work s
 ## What I’m building
 
 - **[Wisdom IT Readiness Toolkit](https://github.com/danwiz/wisdom-it-readiness-toolkit)** — a released open-source assessment toolkit with weighted scoring, maturity classification, Markdown reporting, validation, tests, CI, and packaged CLI workflows
-- **[Sports Management System preservation and modernization](https://github.com/danwiz/sports-management-system-legacy)** — a C++20 modernization and archival preservation of a 2005–2006 academic system, with seven regression suites, CI, release packaging, provenance controls, and split licensing
+- **[Sports Management System preservation and modernization](https://github.com/danwiz/sports-management-system-legacy)** — an active C++20 archival-modernization project. Public portfolio promotion remains on hold until its README, complete source inventory, seven test suites, CI, provenance, licensing boundaries, release packaging, and reproducible validation are confirmed in the standalone repository
 - Reusable engineering standards, templates, reference implementations, and knowledge systems
 - Practical tools for IT operations, cloud, cybersecurity, automation, and digital workplaces
 
@@ -30,10 +30,13 @@ I design, modernize, and operationalize dependable technology systems. My work s
 - Strengthened recovery readiness, operational continuity, and support processes across varied client environments
 - Delivered multi-site technology modernization, troubleshooting, documentation, and service-improvement work
 
-## Current releases
+## Current release
 
 - **[Wisdom IT Readiness Toolkit v0.1.0](https://github.com/danwiz/wisdom-it-readiness-toolkit/releases/tag/v0.1.0)** — validated installation, scoring, report generation, report validation, tests, and artifact upload
-- **[Sports Management System v0.10.0](https://github.com/danwiz/sports-management-system-legacy/releases/tag/v0.10.0)** — clean C++20 build with seven passing regression suites and documented historical provenance
+
+## Release candidates and active validation
+
+- **Sports Management System modernization** — not yet presented as a verified standalone release; completion is tracked in the repository publication baseline issue
 
 ## Connect
 
