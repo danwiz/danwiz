@@ -38,6 +38,10 @@ I design, modernize, and operationalize dependable technology systems. My work s
 
 - **Sports Management System modernization** — not yet presented as a verified standalone release; completion is tracked in the repository publication baseline issue
 
+## Repository governance
+
+Older upstream libraries and tutorial copies are being classified and marked with explicit provenance notices. They are retained only as historical learning references and are not presented as original portfolio work. See [portfolio audit issue #16](https://github.com/danwiz/danwiz/issues/16).
+
 ## Connect
 
 - Portfolio: [danwiz.github.io/danwiz](https://danwiz.github.io/danwiz/)
