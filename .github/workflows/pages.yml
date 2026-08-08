@@ -1,6 +1,10 @@
-name: Deploy GitHub Pages
+name: Validate and deploy GitHub Pages
 
 on:
+  pull_request:
+    paths:
+      - "docs/**"
+      - ".github/workflows/pages.yml"
   push:
     branches: [main]
     paths:
@@ -10,15 +14,44 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate required site files
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s docs/index.html
+          test -s docs/styles.css
+          test -s docs/assets/og-card-1200x630.jpg
+          test -s docs/assets/favicon.png
+      - name: Validate page metadata and local references
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -Fq 'lang="en"' docs/index.html
+          grep -Fq 'name="description"' docs/index.html
+          grep -Fq 'og-card-1200x630.jpg' docs/index.html
+          grep -Fq 'assets/favicon.png' docs/index.html
+          grep -Fq 'href="styles.css"' docs/index.html
+          grep -Fq 'href="#main"' docs/index.html
+          ! grep -Eiq '(TODO|FIXME|lorem ipsum|example\.com)' docs/index.html
+
   deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: validate
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -26,8 +59,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Validate site entry point
-        run: test -f docs/index.html
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload static site
