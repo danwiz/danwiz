@@ -8,6 +8,17 @@ updates:
       time: "09:00"
       timezone: Etc/UTC
     open-pull-requests-limit: 5
+    groups:
+      pages-actions:
+        patterns:
+          - "actions/configure-pages"
+          - "actions/upload-pages-artifact"
+          - "actions/deploy-pages"
+      repository-actions:
+        patterns:
+          - "actions/checkout"
     labels:
       - dependencies
       - automation
+    commit-message:
+      prefix: "deps"
