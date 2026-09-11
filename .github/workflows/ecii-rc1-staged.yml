@@ -59,6 +59,30 @@ jobs:
         shell: bash
         run: ./scripts/verify-rc1.sh artifacts/rc1-verification
 
+      - name: Package verified v1.0.0-rc.1 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/release-source
+          cd /tmp/ecii-work
+          tar \
+            --exclude='ecii-modern-reference/**/bin' \
+            --exclude='ecii-modern-reference/**/obj' \
+            --exclude='ecii-modern-reference/artifacts/rc1-verification/publish' \
+            -czf /home/runner/work/danwiz/danwiz/artifacts/release-source/ecii-modern-reference-v1.0.0-rc.1-source.tar.gz \
+            ecii-modern-reference
+          cd /home/runner/work/danwiz/danwiz
+          sha256sum artifacts/release-source/ecii-modern-reference-v1.0.0-rc.1-source.tar.gz \
+            | tee artifacts/release-source/SHA256SUMS.txt
+
+      - name: Upload verified RC1 source
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecii-v1.0.0-rc.1-source-${{ github.sha }}
+          path: artifacts/release-source/
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Upload staging diagnostics
         if: always()
         uses: actions/upload-artifact@v4
