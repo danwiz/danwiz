@@ -40,10 +40,6 @@ if old not in text:
 verify.write_text(text.replace(old, new, 1))
 
 # Final-release authentication hardening.
-# In production/OIDC mode, require an authenticated principal by default for
-# every endpoint unless it is explicitly marked anonymous. Demo mode keeps the
-# existing local-development behavior because authorization middleware is only
-# enabled for OIDC mode.
 program = root / 'src/ECII.Api/Program.cs'
 text = program.read_text()
 if 'using Microsoft.AspNetCore.Authorization;' not in text:
@@ -55,14 +51,14 @@ if old_auth not in text:
     raise SystemExit('OIDC AddAuthorization marker not found')
 text = text.replace(old_auth, new_auth, 1)
 
-# Health and root metadata are intentionally public for operational probes and
-# service identification. Swagger remains controlled separately by config.
-root_marker = '''app.MapGet("/", () => Results.Ok(new\n{\n    service = "ECII Modern Reference API",\n    version = "1.0.0-rc.1",\n    evidenceBoundary = "Modern clean-room reconstruction; no historical production banking integration."\n}));'''
+# Root metadata is intentionally anonymous. Use index slicing rather than an
+# exact version string so the patch remains stable across the RC version churn.
+root_start = text.index('app.MapGet("/", () => Results.Ok(new')
+root_end = text.index('}));', root_start) + len('}));')
 root_replacement = '''app.MapGet("/", () => Results.Ok(new\n{\n    service = "ECII Modern Reference API",\n    version = "1.0.0-final-candidate",\n    evidenceBoundary = "Modern clean-room reconstruction; no historical production banking integration."\n})).AllowAnonymous();'''
-if root_marker not in text:
-    raise SystemExit('Root endpoint marker not found')
-text = text.replace(root_marker, root_replacement, 1)
+text = text[:root_start] + root_replacement + text[root_end:]
 
+# Operational probes remain anonymous in OIDC mode.
 health_marker = 'app.MapHealthChecks("/health");'
 if health_marker not in text:
     raise SystemExit('Health endpoint marker not found')
@@ -76,13 +72,6 @@ text = text.replace(ready_marker, ready_replacement, 1)
 
 # This is a final-release candidate, not yet the immutable v1.0.0 release.
 (root / 'VERSION').write_text('1.0.0-final-candidate\n')
-text, count = re.subn(
-    r'version\s*=\s*"[^"]+"',
-    'version = "1.0.0-final-candidate"',
-    text,
-    count=1)
-if count != 1:
-    raise SystemExit('Program API version marker not found')
 program.write_text(text)
 
 print('Applied ECII final hardening: dependency security + OIDC fallback authorization')
