@@ -1,9 +1,10 @@
 from pathlib import Path
+import re
 import sys
 
 root = Path(sys.argv[1] if len(sys.argv) > 1 else '/tmp/ecii-work/ecii-modern-reference')
 
-# RC.13 — dependency security remediation.
+# RC.13 / v1.0.0-rc.1 dependency security remediation.
 # Keep the application on .NET/EF 8, but move Microsoft servicing packages to
 # the current 8.0.31 patch and OpenTelemetry to 1.18.0.
 for path in root.rglob('*.csproj'):
@@ -25,6 +26,12 @@ if 'Microsoft.Extensions.Caching.Memory" Version="8.0.1"' not in text:
     text = text.replace(marker, marker + extra, 1)
 infra.write_text(text)
 
+# Align the EF CLI tool with the serviced EF runtime.
+tools = root / '.config/dotnet-tools.json'
+text = tools.read_text()
+text = text.replace('"version": "8.0.8"', '"version": "8.0.31"')
+tools.write_text(text)
+
 # Make the vulnerability audit a release gate rather than informational output.
 verify = root / 'scripts/verify-rc1.sh'
 text = verify.read_text()
@@ -34,5 +41,17 @@ if old not in text:
     raise SystemExit('verify-rc1 vulnerability block not found')
 verify.write_text(text.replace(old, new, 1))
 
-(root / 'VERSION').write_text('0.9.11-rc.13\n')
-print('Applied ECII dependency security patch level 0.9.11-rc.13')
+# This is the exact source candidate that the final verification run tests.
+(root / 'VERSION').write_text('1.0.0-rc.1\n')
+program = root / 'src/ECII.Api/Program.cs'
+text = program.read_text()
+text, count = re.subn(
+    r'version\s*=\s*"[^"]+"',
+    'version = "1.0.0-rc.1"',
+    text,
+    count=1)
+if count != 1:
+    raise SystemExit('Program API version marker not found')
+program.write_text(text)
+
+print('Applied ECII security remediation and promoted source candidate to 1.0.0-rc.1')
