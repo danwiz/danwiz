@@ -1,0 +1,125 @@
+# Case Study — Recovered Legacy Distributed .NET Billing & Payment System
+
+## Executive summary
+
+This case study documents the recovery, analysis, modernization, and verification of a legacy academic distributed billing and payment system associated with the Enterprise Computing course lineage.
+
+The work spans four distinct evidence layers:
+
+1. a recovered early ASP.NET/VB.NET implementation with ASMX services and SQL Server databases;
+2. a formal 2009 Enterprise Computing II assignment specification for a distributed telecom billing/payment system;
+3. a later C# redevelopment archived in 2011 with LIME, NCB, Scotia, reusable controls, web services, MDF/LDF databases, and SQL scripts;
+4. a contemporary .NET 8 reference implementation built to preserve the business scenario while replacing obsolete architecture and unsafe design assumptions.
+
+## Historical system
+
+The recovered historical implementation used:
+
+- ASP.NET Web Forms
+- VB.NET in the earlier generation
+- C# in the later redevelopment
+- ASMX/SOAP web services
+- SQL Server databases
+- stored procedures and views
+- session state and cookies
+- institution-specific service layers for telecom and banking functions
+
+The original payment flow coordinated separate operations across the telecom, Scotia, and NCB databases. No evidence of a distributed transaction coordinator was found. That makes cross-database atomicity and duplicate-payment handling material modernization concerns.
+
+## Modernization objectives
+
+The modern reference implementation preserves the core business invariant:
+
+`authenticated telecom customer -> account/billing -> bank debit/credit simulation -> payment -> telecom balance update -> review/audit`
+
+while replacing the historical implementation model with:
+
+- explicit domain and application boundaries;
+- modern identity separation;
+- resilient payment orchestration;
+- idempotency and request fingerprints;
+- optimistic concurrency;
+- ordered payment-event history;
+- compensation and reconciliation states;
+- outbox processing;
+- accounting/ledger records;
+- structured API contracts and Problem Details;
+- production authentication integration path;
+- automated tests, migrations, containerization, and CI verification.
+
+## Architecture
+
+The reference solution is organized into:
+
+- `ECII.Domain`
+- `ECII.Application`
+- `ECII.Contracts`
+- `ECII.Infrastructure`
+- `ECII.Api`
+- automated test projects for domain, application, architecture, and integration behavior
+
+Principal bounded areas include Customer, Telecom Account, Billing, Usage, Payments, Banking Integration, Reconciliation, Notifications, and Audit.
+
+## Payment reliability model
+
+The historical sequence of Scotia withdrawal -> NCB deposit -> telecom balance update is modeled as a process rather than a single distributed transaction.
+
+The modern design adds:
+
+- idempotent payment creation;
+- request fingerprint conflict detection;
+- persisted payment states;
+- ordered transition events;
+- source and destination compensation paths;
+- reconciliation-required states;
+- ledger and journal records;
+- outbox retry/dead-letter processing;
+- auditability for privileged actions.
+
+## Runtime verification
+
+The `v1.0.0-rc.1` candidate passed a GitHub-hosted .NET 8 verification gate with:
+
+- 0 compiler warnings
+- 0 compiler errors
+- 16/16 domain tests passing
+- 5/5 application tests passing
+- 2/2 architecture tests passing
+- 13/13 integration tests passing
+- real EF Core migration generation and clean-database application
+- no vulnerable packages reported by the NuGet vulnerability audit
+- successful API publish
+- successful Docker build
+
+Verified source SHA-256:
+
+`c6421a5abc3a2c0b4e958e9c209de41bac0830b3fc4c843183d21b9c57d00837`
+
+## Portfolio-safe attribution
+
+Supported historical attribution is intentionally conservative:
+
+- participated in the earlier Enterprise Computing group project;
+- retained and circulated project materials;
+- initiated or participated in legacy recovery work;
+- sought database restoration;
+- participated in integration and hosted-build remediation;
+- later reconstructed and modernized the system using recovered evidence.
+
+This case study does **not** claim sole authorship of the original academic project, production banking integration, commercial telecom deployment, or an unverified final course grade.
+
+## Engineering value demonstrated
+
+The project demonstrates:
+
+- legacy code archaeology;
+- evidence-based requirements reconstruction;
+- architecture modernization;
+- distributed workflow design;
+- financial-transaction resilience concepts;
+- API and domain modeling;
+- EF Core persistence and migrations;
+- automated testing and regression repair;
+- CI/CD and containerization;
+- security remediation;
+- release engineering and provenance discipline.
