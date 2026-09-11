@@ -27,7 +27,6 @@ jobs:
           wc -c staging/ecii-rc1/bundle.part*.b64 | tee artifacts/staging-diagnostics/part-sizes.txt
           sha256sum staging/ecii-rc1/bundle.part*.b64 | tee artifacts/staging-diagnostics/part-sha256.txt
 
-          # One transport chunk was confirmed to contain a single-character staging typo.
           sed 's/mhGagyS8/mhGigyS8/' staging/ecii-rc1/bundle.part06_09.b64 > /tmp/bundle.part06_09.corrected.b64
 
           cat \
@@ -57,44 +56,30 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
+          import re
+
           root = Path('/tmp/ecii-work/ecii-modern-reference')
 
-          fixes = [
-              (
-                  root / 'src/ECII.Infrastructure/Persistence/AccountingConfigurations.cs',
-                  '''builder.HasMany<AccountingEntry>("_entries")
-                              .WithOne()
-                              .HasForeignKey(x => x.JournalId)
-                              .OnDelete(DeleteBehavior.Cascade);''',
-                  '''builder.HasMany(x => x.Entries)
-                              .WithOne()
-                              .HasForeignKey(x => x.JournalId)
-                              .OnDelete(DeleteBehavior.Cascade);
-
-                          builder.Navigation(x => x.Entries)
-                              .UsePropertyAccessMode(PropertyAccessMode.Field);'''
-              ),
-              (
-                  root / 'src/ECII.Infrastructure/Persistence/PaymentConfiguration.cs',
-                  '''builder.HasMany<PaymentEvent>("_events")
-                              .WithOne()
-                              .HasForeignKey(x => x.PaymentId)
-                              .OnDelete(DeleteBehavior.Restrict);''',
-                  '''builder.HasMany(x => x.Events)
-                              .WithOne()
-                              .HasForeignKey(x => x.PaymentId)
-                              .OnDelete(DeleteBehavior.Restrict);
-
-                          builder.Navigation(x => x.Events)
-                              .UsePropertyAccessMode(PropertyAccessMode.Field);'''
-              )
-          ]
-
-          for path, old, new in fixes:
+          def replace_mapping(path: Path, pattern: str, replacement: str, label: str):
               text = path.read_text()
-              if old not in text:
-                  raise SystemExit(f'Expected RC.6 mapping not found in {path}; refusing broad edit.')
-              path.write_text(text.replace(old, new))
+              updated, count = re.subn(pattern, replacement, text, count=1, flags=re.MULTILINE)
+              if count != 1:
+                  raise SystemExit(f'{label}: expected exactly one mapping replacement, got {count}')
+              path.write_text(updated)
+
+          replace_mapping(
+              root / 'src/ECII.Infrastructure/Persistence/AccountingConfigurations.cs',
+              r'builder\.HasMany<AccountingEntry>\("_entries"\)\s*\.WithOne\(\)\s*\.HasForeignKey\(x => x\.JournalId\)\s*\.OnDelete\(DeleteBehavior\.Cascade\);',
+              '''builder.HasMany(x => x.Entries)\n            .WithOne()\n            .HasForeignKey(x => x.JournalId)\n            .OnDelete(DeleteBehavior.Cascade);\n\n        builder.Navigation(x => x.Entries)\n            .UsePropertyAccessMode(PropertyAccessMode.Field);''',
+              'AccountingJournal.Entries'
+          )
+
+          replace_mapping(
+              root / 'src/ECII.Infrastructure/Persistence/PaymentConfiguration.cs',
+              r'builder\.HasMany<PaymentEvent>\("_events"\)\s*\.WithOne\(\)\s*\.HasForeignKey\(x => x\.PaymentId\)\s*\.OnDelete\(DeleteBehavior\.Restrict\);',
+              '''builder.HasMany(x => x.Events)\n            .WithOne()\n            .HasForeignKey(x => x.PaymentId)\n            .OnDelete(DeleteBehavior.Restrict);\n\n        builder.Navigation(x => x.Events)\n            .UsePropertyAccessMode(PropertyAccessMode.Field);''',
+              'Payment.Events'
+          )
 
           (root / 'VERSION').write_text('0.9.6-rc.8\n')
           PY
