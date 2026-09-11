@@ -1,0 +1,42 @@
+name: ECII RC3 Runtime Verification
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/ecii-rc3-runtime.yml'
+      - 'staging/ecii-rc3/**'
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Reassemble candidate
+        run: |
+          mkdir -p /tmp/ecii
+          cat staging/ecii-rc3/chunk* > /tmp/ecii/archive.b64
+          base64 -d /tmp/ecii/archive.b64 > /tmp/ecii/candidate.zip
+          echo '9b3e3a777354122c3069010e8b3a7f87ec9c2c8ef7a0cc23aaf0b5d3f3cb26fd  /tmp/ecii/candidate.zip' | sha256sum -c -
+          unzip -q /tmp/ecii/candidate.zip -d /tmp/ecii/src
+      - name: Restore
+        working-directory: /tmp/ecii/src/ecii-modern-reference
+        run: dotnet restore ECII.Modern.sln
+      - name: Build
+        working-directory: /tmp/ecii/src/ecii-modern-reference
+        run: dotnet build ECII.Modern.sln --no-restore --configuration Release
+      - name: Test
+        working-directory: /tmp/ecii/src/ecii-modern-reference
+        run: dotnet test ECII.Modern.sln --no-build --configuration Release --verbosity normal
+      - name: Restore EF tool
+        working-directory: /tmp/ecii/src/ecii-modern-reference
+        run: dotnet tool restore
+      - name: EF migrations list
+        working-directory: /tmp/ecii/src/ecii-modern-reference
+        run: dotnet ef migrations list --project src/ECII.Infrastructure --startup-project src/ECII.Api
+      - name: Vulnerability audit
+        working-directory: /tmp/ecii/src/ecii-modern-reference
+        run: dotnet list ECII.Modern.sln package --vulnerable --include-transitive
