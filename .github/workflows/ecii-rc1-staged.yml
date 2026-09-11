@@ -23,12 +23,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p artifacts/staging-diagnostics
-          ls -1 staging/ecii-rc1/bundle.part*.b64 | tee artifacts/staging-diagnostics/parts.txt
-          wc -c staging/ecii-rc1/bundle.part*.b64 | tee artifacts/staging-diagnostics/part-sizes.txt
-          sha256sum staging/ecii-rc1/bundle.part*.b64 | tee artifacts/staging-diagnostics/part-sha256.txt
-
           sed 's/mhGagyS8/mhGigyS8/' staging/ecii-rc1/bundle.part06_09.b64 > /tmp/bundle.part06_09.corrected.b64
-
           cat \
             staging/ecii-rc1/bundle.part00.b64 \
             staging/ecii-rc1/bundle.part01.b64 \
@@ -38,19 +33,15 @@ jobs:
             /tmp/bundle.part06_09.corrected.b64 \
             staging/ecii-rc1/bundle.part10_13.b64 \
             > /tmp/ecii.b64
-
-          wc -c /tmp/ecii.b64 | tee artifacts/staging-diagnostics/combined-size.txt
-          sha256sum /tmp/ecii.b64 | tee artifacts/staging-diagnostics/combined-b64-sha256.txt
           echo "a8f2fabf3c206f725a6a1e03d7351855cc687c13c28d82c10ae0083db9563a97  /tmp/ecii.b64" | sha256sum --check - | tee artifacts/staging-diagnostics/base64-integrity.txt
           base64 --decode /tmp/ecii.b64 > /tmp/ecii-rc1-source.tar.xz
-          sha256sum /tmp/ecii-rc1-source.tar.xz | tee artifacts/staging-diagnostics/archive-sha256.txt
           echo "26792b80b1e4d62a2f0c2f65435e4a109218237056d4731714527563fd945ff4  /tmp/ecii-rc1-source.tar.xz" | sha256sum --check - | tee artifacts/staging-diagnostics/archive-integrity.txt
           mkdir -p /tmp/ecii-work
           tar -xJf /tmp/ecii-rc1-source.tar.xz -C /tmp/ecii-work
           test -f /tmp/ecii-work/ecii-modern-reference/ECII.Modern.sln
           chmod +x /tmp/ecii-work/ecii-modern-reference/scripts/*.sh
 
-      - name: Apply RC.8 EF navigation fixes
+      - name: Apply RC.9 runtime fixes
         shell: bash
         run: |
           set -euo pipefail
@@ -60,31 +51,36 @@ jobs:
 
           root = Path('/tmp/ecii-work/ecii-modern-reference')
 
-          def replace_mapping(path: Path, pattern: str, replacement: str, label: str):
+          def replace_once(path: Path, pattern: str, replacement: str, label: str):
               text = path.read_text()
               updated, count = re.subn(pattern, replacement, text, count=1, flags=re.MULTILINE)
               if count != 1:
-                  raise SystemExit(f'{label}: expected exactly one mapping replacement, got {count}')
+                  raise SystemExit(f'{label}: expected exactly one replacement, got {count}')
               path.write_text(updated)
 
-          replace_mapping(
+          replace_once(
               root / 'src/ECII.Infrastructure/Persistence/AccountingConfigurations.cs',
               r'builder\.HasMany<AccountingEntry>\("_entries"\)\s*\.WithOne\(\)\s*\.HasForeignKey\(x => x\.JournalId\)\s*\.OnDelete\(DeleteBehavior\.Cascade\);',
               '''builder.HasMany(x => x.Entries)\n            .WithOne()\n            .HasForeignKey(x => x.JournalId)\n            .OnDelete(DeleteBehavior.Cascade);\n\n        builder.Navigation(x => x.Entries)\n            .UsePropertyAccessMode(PropertyAccessMode.Field);''',
               'AccountingJournal.Entries'
           )
 
-          replace_mapping(
+          replace_once(
               root / 'src/ECII.Infrastructure/Persistence/PaymentConfiguration.cs',
               r'builder\.HasMany<PaymentEvent>\("_events"\)\s*\.WithOne\(\)\s*\.HasForeignKey\(x => x\.PaymentId\)\s*\.OnDelete\(DeleteBehavior\.Restrict\);',
               '''builder.HasMany(x => x.Events)\n            .WithOne()\n            .HasForeignKey(x => x.PaymentId)\n            .OnDelete(DeleteBehavior.Restrict);\n\n        builder.Navigation(x => x.Events)\n            .UsePropertyAccessMode(PropertyAccessMode.Field);''',
               'Payment.Events'
           )
 
-          (root / 'VERSION').write_text('0.9.6-rc.8\n')
+          repo = root / 'src/ECII.Infrastructure/Persistence/SettlementRepositories.cs'
+          text = repo.read_text()
+          start = text.index('    public async Task<IReadOnlyList<OutboxMessage>> GetPendingAsync(')
+          end = text.index('\n}\n\n\npublic sealed class OutboxAdminRepository', start)
+          replacement = '''    public async Task<IReadOnlyList<OutboxMessage>> GetPendingAsync(\n        int take,\n        CancellationToken cancellationToken)\n    {\n        var now = DateTimeOffset.UtcNow;\n\n        if (_db.Database.IsSqlite())\n        {\n            var candidates = await _db.OutboxMessages\n                .Where(x =>\n                    x.DeadLetteredAt == null &&\n                    (x.Status == OutboxStatus.Pending ||\n                     x.Status == OutboxStatus.Failed))\n                .ToListAsync(cancellationToken);\n\n            return candidates\n                .Where(x =>\n                    x.Status == OutboxStatus.Pending ||\n                    x.NextAttemptAt == null ||\n                    x.NextAttemptAt <= now)\n                .OrderBy(x => x.OccurredAt)\n                .Take(take)\n                .ToList();\n        }\n\n        return await _db.OutboxMessages\n            .Where(x =>\n                x.DeadLetteredAt == null &&\n                (x.Status == OutboxStatus.Pending ||\n                 (x.Status == OutboxStatus.Failed &&\n                  (x.NextAttemptAt == null || x.NextAttemptAt <= now))))\n            .OrderBy(x => x.OccurredAt)\n            .Take(take)\n            .ToListAsync(cancellationToken);\n    }'''
+          repo.write_text(text[:start] + replacement + text[end:])
+          (root / 'VERSION').write_text('0.9.7-rc.9\n')
           PY
-          grep -n -A10 -B2 'HasMany' /tmp/ecii-work/ecii-modern-reference/src/ECII.Infrastructure/Persistence/AccountingConfigurations.cs | tee artifacts/staging-diagnostics/rc8-accounting-mapping.txt
-          grep -n -A10 -B2 'HasMany' /tmp/ecii-work/ecii-modern-reference/src/ECII.Infrastructure/Persistence/PaymentConfiguration.cs | tee artifacts/staging-diagnostics/rc8-payment-mapping.txt
+          grep -n -A40 -B2 'GetPendingAsync' /tmp/ecii-work/ecii-modern-reference/src/ECII.Infrastructure/Persistence/SettlementRepositories.cs | tee artifacts/staging-diagnostics/rc9-outbox-query.txt
 
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
