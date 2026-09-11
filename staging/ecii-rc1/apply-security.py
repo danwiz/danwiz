@@ -4,9 +4,7 @@ import sys
 
 root = Path(sys.argv[1] if len(sys.argv) > 1 else '/tmp/ecii-work/ecii-modern-reference')
 
-# RC.13 / v1.0.0-rc.1 dependency security remediation.
-# Keep the application on .NET/EF 8, but move Microsoft servicing packages to
-# the current 8.0.31 patch and OpenTelemetry to 1.18.0.
+# Final hardening candidate dependency security baseline.
 for path in root.rglob('*.csproj'):
     text = path.read_text()
     text = text.replace('Version="8.0.8"', 'Version="8.0.31"')
@@ -41,17 +39,50 @@ if old not in text:
     raise SystemExit('verify-rc1 vulnerability block not found')
 verify.write_text(text.replace(old, new, 1))
 
-# This is the exact source candidate that the final verification run tests.
-(root / 'VERSION').write_text('1.0.0-rc.1\n')
+# Final-release authentication hardening.
+# In production/OIDC mode, require an authenticated principal by default for
+# every endpoint unless it is explicitly marked anonymous. Demo mode keeps the
+# existing local-development behavior because authorization middleware is only
+# enabled for OIDC mode.
 program = root / 'src/ECII.Api/Program.cs'
 text = program.read_text()
+if 'using Microsoft.AspNetCore.Authorization;' not in text:
+    text = 'using Microsoft.AspNetCore.Authorization;\n' + text
+
+old_auth = '    builder.Services.AddAuthorization();'
+new_auth = '''    builder.Services.AddAuthorization(options =>\n    {\n        options.FallbackPolicy = new AuthorizationPolicyBuilder()\n            .RequireAuthenticatedUser()\n            .Build();\n    });'''
+if old_auth not in text:
+    raise SystemExit('OIDC AddAuthorization marker not found')
+text = text.replace(old_auth, new_auth, 1)
+
+# Health and root metadata are intentionally public for operational probes and
+# service identification. Swagger remains controlled separately by config.
+root_marker = '''app.MapGet("/", () => Results.Ok(new\n{\n    service = "ECII Modern Reference API",\n    version = "1.0.0-rc.1",\n    evidenceBoundary = "Modern clean-room reconstruction; no historical production banking integration."\n}));'''
+root_replacement = '''app.MapGet("/", () => Results.Ok(new\n{\n    service = "ECII Modern Reference API",\n    version = "1.0.0-final-candidate",\n    evidenceBoundary = "Modern clean-room reconstruction; no historical production banking integration."\n})).AllowAnonymous();'''
+if root_marker not in text:
+    raise SystemExit('Root endpoint marker not found')
+text = text.replace(root_marker, root_replacement, 1)
+
+health_marker = 'app.MapHealthChecks("/health");'
+if health_marker not in text:
+    raise SystemExit('Health endpoint marker not found')
+text = text.replace(health_marker, 'app.MapHealthChecks("/health").AllowAnonymous();', 1)
+
+ready_marker = '''app.MapHealthChecks("/health/ready", new HealthCheckOptions\n{\n    Predicate = check => check.Name == "database"\n});'''
+ready_replacement = '''app.MapHealthChecks("/health/ready", new HealthCheckOptions\n{\n    Predicate = check => check.Name == "database"\n}).AllowAnonymous();'''
+if ready_marker not in text:
+    raise SystemExit('Readiness endpoint marker not found')
+text = text.replace(ready_marker, ready_replacement, 1)
+
+# This is a final-release candidate, not yet the immutable v1.0.0 release.
+(root / 'VERSION').write_text('1.0.0-final-candidate\n')
 text, count = re.subn(
     r'version\s*=\s*"[^"]+"',
-    'version = "1.0.0-rc.1"',
+    'version = "1.0.0-final-candidate"',
     text,
     count=1)
 if count != 1:
     raise SystemExit('Program API version marker not found')
 program.write_text(text)
 
-print('Applied ECII security remediation and promoted source candidate to 1.0.0-rc.1')
+print('Applied ECII final hardening: dependency security + OIDC fallback authorization')
