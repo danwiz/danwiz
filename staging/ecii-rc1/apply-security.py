@@ -4,7 +4,7 @@ import sys
 
 root = Path(sys.argv[1] if len(sys.argv) > 1 else '/tmp/ecii-work/ecii-modern-reference')
 
-# Final hardening candidate dependency security baseline.
+# Final release dependency security baseline.
 for path in root.rglob('*.csproj'):
     text = path.read_text()
     text = text.replace('Version="8.0.8"', 'Version="8.0.31"')
@@ -55,7 +55,7 @@ text = text.replace(old_auth, new_auth, 1)
 # exact version string so the patch remains stable across the RC version churn.
 root_start = text.index('app.MapGet("/", () => Results.Ok(new')
 root_end = text.index('}));', root_start) + len('}));')
-root_replacement = '''app.MapGet("/", () => Results.Ok(new\n{\n    service = "ECII Modern Reference API",\n    version = "1.0.0-final-candidate",\n    evidenceBoundary = "Modern clean-room reconstruction; no historical production banking integration."\n})).AllowAnonymous();'''
+root_replacement = '''app.MapGet("/", () => Results.Ok(new\n{\n    service = "ECII Modern Reference API",\n    version = "1.0.0",\n    evidenceBoundary = "Modern clean-room reconstruction; no historical production banking integration."\n})).AllowAnonymous();'''
 text = text[:root_start] + root_replacement + text[root_end:]
 
 # Operational probes remain anonymous in OIDC mode.
@@ -70,8 +70,8 @@ if ready_marker not in text:
     raise SystemExit('Readiness endpoint marker not found')
 text = text.replace(ready_marker, ready_replacement, 1)
 
-# This is a final-release candidate, not yet the immutable v1.0.0 release.
-(root / 'VERSION').write_text('1.0.0-final-candidate\n')
+# Immutable v1.0.0 release candidate source produced by the final gate.
+(root / 'VERSION').write_text('1.0.0\n')
 program.write_text(text)
 
-print('Applied ECII final hardening: dependency security + OIDC fallback authorization')
+print('Applied ECII v1.0.0 final hardening: dependency security + OIDC fallback authorization')
