@@ -41,12 +41,13 @@ jobs:
           test -f /tmp/ecii-work/ecii-modern-reference/ECII.Modern.sln
           chmod +x /tmp/ecii-work/ecii-modern-reference/scripts/*.sh
 
-      - name: Apply current ECII runtime and final-hardening patch sets
+      - name: Apply current ECII runtime, security and final documentation patches
         shell: bash
         run: |
           set -euo pipefail
           python3 staging/ecii-rc1/apply-current.py /tmp/ecii-work/ecii-modern-reference
           python3 staging/ecii-rc1/apply-security.py /tmp/ecii-work/ecii-modern-reference
+          python3 staging/ecii-rc1/apply-final-docs.py /tmp/ecii-work/ecii-modern-reference
           cat /tmp/ecii-work/ecii-modern-reference/VERSION | tee artifacts/staging-diagnostics/patched-version.txt
 
       - name: Setup .NET 8
@@ -195,6 +196,20 @@ jobs:
           fi
           echo 'PASS: no high-signal committed secret patterns detected.' \
             | tee artifacts/final-hardening/secret-scan.txt
+
+      - name: Verify final release documentation exists
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=/tmp/ecii-work/ecii-modern-reference
+          test -s "$root/docs/06-security/threat-model-v1.md"
+          test -s "$root/docs/08-devops/backup-restore-migration-runbook.md"
+          test -s "$root/docs/08-devops/known-limitations-v1.md"
+          printf '%s\n' \
+            'PASS: threat model present' \
+            'PASS: backup/restore/migration runbook present' \
+            'PASS: known limitations present' \
+            | tee artifacts/final-hardening/final-docs.txt
 
       - name: Package verified final candidate source
         shell: bash
