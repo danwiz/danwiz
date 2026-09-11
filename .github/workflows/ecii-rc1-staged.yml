@@ -25,6 +25,7 @@ jobs:
           mkdir -p artifacts/staging-diagnostics
           ls -1 staging/ecii-rc1/bundle.part*.b64 | tee artifacts/staging-diagnostics/parts.txt
           wc -c staging/ecii-rc1/bundle.part*.b64 | tee artifacts/staging-diagnostics/part-sizes.txt
+          sha256sum staging/ecii-rc1/bundle.part*.b64 | tee artifacts/staging-diagnostics/part-sha256.txt
           cat staging/ecii-rc1/bundle.part*.b64 > /tmp/ecii.b64
           wc -c /tmp/ecii.b64 | tee artifacts/staging-diagnostics/combined-size.txt
           sha256sum /tmp/ecii.b64 | tee artifacts/staging-diagnostics/combined-b64-sha256.txt
