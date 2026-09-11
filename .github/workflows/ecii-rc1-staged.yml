@@ -41,11 +41,12 @@ jobs:
           test -f /tmp/ecii-work/ecii-modern-reference/ECII.Modern.sln
           chmod +x /tmp/ecii-work/ecii-modern-reference/scripts/*.sh
 
-      - name: Apply current ECII runtime patch set
+      - name: Apply current ECII runtime and security patch sets
         shell: bash
         run: |
           set -euo pipefail
           python3 staging/ecii-rc1/apply-current.py /tmp/ecii-work/ecii-modern-reference
+          python3 staging/ecii-rc1/apply-security.py /tmp/ecii-work/ecii-modern-reference
           cat /tmp/ecii-work/ecii-modern-reference/VERSION | tee artifacts/staging-diagnostics/patched-version.txt
 
       - name: Setup .NET 8
