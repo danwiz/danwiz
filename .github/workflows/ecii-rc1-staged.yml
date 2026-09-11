@@ -22,9 +22,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          mkdir -p artifacts/staging-diagnostics
+          ls -1 staging/ecii-rc1/bundle.part*.b64 | tee artifacts/staging-diagnostics/parts.txt
+          wc -c staging/ecii-rc1/bundle.part*.b64 | tee artifacts/staging-diagnostics/part-sizes.txt
           cat staging/ecii-rc1/bundle.part*.b64 > /tmp/ecii.b64
+          wc -c /tmp/ecii.b64 | tee artifacts/staging-diagnostics/combined-size.txt
+          sha256sum /tmp/ecii.b64 | tee artifacts/staging-diagnostics/combined-b64-sha256.txt
+          echo "a8f2fabf3c206f725a6a1e03d7351855cc687c13c28d82c10ae0083db9563a97  /tmp/ecii.b64" | sha256sum --check - | tee artifacts/staging-diagnostics/base64-integrity.txt
           base64 --decode /tmp/ecii.b64 > /tmp/ecii-rc1-source.tar.xz
-          echo "26792b80b1e4d62a2f0c2f65435e4a109218237056d4731714527563fd945ff4  /tmp/ecii-rc1-source.tar.xz" | sha256sum --check -
+          sha256sum /tmp/ecii-rc1-source.tar.xz | tee artifacts/staging-diagnostics/archive-sha256.txt
+          echo "26792b80b1e4d62a2f0c2f65435e4a109218237056d4731714527563fd945ff4  /tmp/ecii-rc1-source.tar.xz" | sha256sum --check - | tee artifacts/staging-diagnostics/archive-integrity.txt
           mkdir -p /tmp/ecii-work
           tar -xJf /tmp/ecii-rc1-source.tar.xz -C /tmp/ecii-work
           test -f /tmp/ecii-work/ecii-modern-reference/ECII.Modern.sln
@@ -39,6 +46,15 @@ jobs:
         working-directory: /tmp/ecii-work/ecii-modern-reference
         shell: bash
         run: ./scripts/verify-rc1.sh artifacts/rc1-verification
+
+      - name: Upload staging diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecii-staging-diagnostics-${{ github.sha }}
+          path: artifacts/staging-diagnostics/
+          if-no-files-found: warn
+          retention-days: 14
 
       - name: Upload RC1 verification evidence
         if: always()
