@@ -51,32 +51,55 @@ jobs:
           test -f /tmp/ecii-work/ecii-modern-reference/ECII.Modern.sln
           chmod +x /tmp/ecii-work/ecii-modern-reference/scripts/*.sh
 
-      - name: Apply RC.7 EF accounting navigation fix
+      - name: Apply RC.8 EF navigation fixes
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
           root = Path('/tmp/ecii-work/ecii-modern-reference')
-          path = root / 'src/ECII.Infrastructure/Persistence/AccountingConfigurations.cs'
-          text = path.read_text()
-          old = '''builder.HasMany<AccountingEntry>("_entries")
-                      .WithOne()
-                      .HasForeignKey(x => x.JournalId)
-                      .OnDelete(DeleteBehavior.Cascade);'''
-          new = '''builder.HasMany(x => x.Entries)
-                      .WithOne()
-                      .HasForeignKey(x => x.JournalId)
-                      .OnDelete(DeleteBehavior.Cascade);
 
-                  builder.Navigation(x => x.Entries)
-                      .UsePropertyAccessMode(PropertyAccessMode.Field);'''
-          if old not in text:
-              raise SystemExit('Expected RC.6 accounting mapping not found; refusing broad edit.')
-          path.write_text(text.replace(old, new))
-          (root / 'VERSION').write_text('0.9.5-rc.7\n')
+          fixes = [
+              (
+                  root / 'src/ECII.Infrastructure/Persistence/AccountingConfigurations.cs',
+                  '''builder.HasMany<AccountingEntry>("_entries")
+                              .WithOne()
+                              .HasForeignKey(x => x.JournalId)
+                              .OnDelete(DeleteBehavior.Cascade);''',
+                  '''builder.HasMany(x => x.Entries)
+                              .WithOne()
+                              .HasForeignKey(x => x.JournalId)
+                              .OnDelete(DeleteBehavior.Cascade);
+
+                          builder.Navigation(x => x.Entries)
+                              .UsePropertyAccessMode(PropertyAccessMode.Field);'''
+              ),
+              (
+                  root / 'src/ECII.Infrastructure/Persistence/PaymentConfiguration.cs',
+                  '''builder.HasMany<PaymentEvent>("_events")
+                              .WithOne()
+                              .HasForeignKey(x => x.PaymentId)
+                              .OnDelete(DeleteBehavior.Restrict);''',
+                  '''builder.HasMany(x => x.Events)
+                              .WithOne()
+                              .HasForeignKey(x => x.PaymentId)
+                              .OnDelete(DeleteBehavior.Restrict);
+
+                          builder.Navigation(x => x.Events)
+                              .UsePropertyAccessMode(PropertyAccessMode.Field);'''
+              )
+          ]
+
+          for path, old, new in fixes:
+              text = path.read_text()
+              if old not in text:
+                  raise SystemExit(f'Expected RC.6 mapping not found in {path}; refusing broad edit.')
+              path.write_text(text.replace(old, new))
+
+          (root / 'VERSION').write_text('0.9.6-rc.8\n')
           PY
-          grep -n -A10 -B2 'HasMany' /tmp/ecii-work/ecii-modern-reference/src/ECII.Infrastructure/Persistence/AccountingConfigurations.cs | tee artifacts/staging-diagnostics/rc7-accounting-mapping.txt
+          grep -n -A10 -B2 'HasMany' /tmp/ecii-work/ecii-modern-reference/src/ECII.Infrastructure/Persistence/AccountingConfigurations.cs | tee artifacts/staging-diagnostics/rc8-accounting-mapping.txt
+          grep -n -A10 -B2 'HasMany' /tmp/ecii-work/ecii-modern-reference/src/ECII.Infrastructure/Persistence/PaymentConfiguration.cs | tee artifacts/staging-diagnostics/rc8-payment-mapping.txt
 
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
