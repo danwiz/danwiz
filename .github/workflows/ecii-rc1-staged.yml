@@ -28,7 +28,6 @@ jobs:
           sha256sum staging/ecii-rc1/bundle.part*.b64 | tee artifacts/staging-diagnostics/part-sha256.txt
 
           # One transport chunk was confirmed to contain a single-character staging typo.
-          # Apply the narrowly scoped correction, then validate the complete archive hashes.
           sed 's/mhGagyS8/mhGigyS8/' staging/ecii-rc1/bundle.part06_09.b64 > /tmp/bundle.part06_09.corrected.b64
 
           cat \
@@ -51,6 +50,33 @@ jobs:
           tar -xJf /tmp/ecii-rc1-source.tar.xz -C /tmp/ecii-work
           test -f /tmp/ecii-work/ecii-modern-reference/ECII.Modern.sln
           chmod +x /tmp/ecii-work/ecii-modern-reference/scripts/*.sh
+
+      - name: Apply RC.7 EF accounting navigation fix
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          root = Path('/tmp/ecii-work/ecii-modern-reference')
+          path = root / 'src/ECII.Infrastructure/Persistence/AccountingConfigurations.cs'
+          text = path.read_text()
+          old = '''builder.HasMany<AccountingEntry>("_entries")
+                      .WithOne()
+                      .HasForeignKey(x => x.JournalId)
+                      .OnDelete(DeleteBehavior.Cascade);'''
+          new = '''builder.HasMany(x => x.Entries)
+                      .WithOne()
+                      .HasForeignKey(x => x.JournalId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                  builder.Navigation(x => x.Entries)
+                      .UsePropertyAccessMode(PropertyAccessMode.Field);'''
+          if old not in text:
+              raise SystemExit('Expected RC.6 accounting mapping not found; refusing broad edit.')
+          path.write_text(text.replace(old, new))
+          (root / 'VERSION').write_text('0.9.5-rc.7\n')
+          PY
+          grep -n -A10 -B2 'HasMany' /tmp/ecii-work/ecii-modern-reference/src/ECII.Infrastructure/Persistence/AccountingConfigurations.cs | tee artifacts/staging-diagnostics/rc7-accounting-mapping.txt
 
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
