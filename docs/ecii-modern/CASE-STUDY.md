@@ -44,8 +44,8 @@ while replacing the historical implementation model with:
 - outbox processing;
 - accounting/ledger records;
 - structured API contracts and Problem Details;
-- production authentication integration path;
-- automated tests, migrations, containerization, and CI verification.
+- production OIDC authentication path with authenticated fallback authorization;
+- automated tests, migrations, SBOM generation, containerization, and CI verification.
 
 ## Architecture
 
@@ -76,9 +76,9 @@ The modern design adds:
 - outbox retry/dead-letter processing;
 - auditability for privileged actions.
 
-## Runtime verification
+## Final runtime verification
 
-The `v1.0.0-rc.1` candidate passed a GitHub-hosted .NET 8 verification gate with:
+The `v1.0.0` source passed the complete GitHub-hosted .NET 8 release and hardening gate with:
 
 - 0 compiler warnings
 - 0 compiler errors
@@ -86,14 +86,29 @@ The `v1.0.0-rc.1` candidate passed a GitHub-hosted .NET 8 verification gate with
 - 5/5 application tests passing
 - 2/2 architecture tests passing
 - 13/13 integration tests passing
-- real EF Core migration generation and clean-database application
+- real EF Core `InitialCreate` generation and clean-database application
+- migration rollback to `0` and forward replay
 - no vulnerable packages reported by the NuGet vulnerability audit
+- CycloneDX SBOM generation
 - successful API publish
 - successful Docker build
+- healthy development and production-mode health/readiness probes
+- production Swagger disabled
+- unauthenticated production API access returning HTTP 401
+- production failure injection disabled
+- representative OIDC Authority/Audience startup validation
+- high-signal committed-secret scan passing
+- final threat model, recovery runbook, and known-limitations documentation included
 
-Verified source SHA-256:
+GitHub Actions run: `34615304310`
 
-`c6421a5abc3a2c0b4e958e9c209de41bac0830b3fc4c843183d21b9c57d00837`
+Final source SHA-256:
+
+`8bbb3ecefa26ac24cc423845e79d6283883e67a96fedcc509845d8490cc3edc2`
+
+CycloneDX SBOM SHA-256:
+
+`dc3e553f494044f10c04e309ac1fe21f68731791b50ff13fbba65c7822a3eff3`
 
 ## Portfolio-safe attribution
 
@@ -122,4 +137,8 @@ The project demonstrates:
 - automated testing and regression repair;
 - CI/CD and containerization;
 - security remediation;
-- release engineering and provenance discipline.
+- release engineering, SBOM generation, and provenance discipline.
+
+## Known limitations
+
+The verified runtime uses SQLite, while SQL Server remains a future provider-validation target. Banking gateways are simulations. The OIDC production path is validated with representative configuration rather than a live enterprise identity-provider tenant. No production payment certification, penetration-test certification, HA certification, or regulatory financial-system claim is made.
