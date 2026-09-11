@@ -26,7 +26,21 @@ jobs:
           ls -1 staging/ecii-rc1/bundle.part*.b64 | tee artifacts/staging-diagnostics/parts.txt
           wc -c staging/ecii-rc1/bundle.part*.b64 | tee artifacts/staging-diagnostics/part-sizes.txt
           sha256sum staging/ecii-rc1/bundle.part*.b64 | tee artifacts/staging-diagnostics/part-sha256.txt
-          cat staging/ecii-rc1/bundle.part*.b64 > /tmp/ecii.b64
+
+          # One transport chunk was confirmed to contain a single-character staging typo.
+          # Apply the narrowly scoped correction, then validate the complete archive hashes.
+          sed 's/mhGagyS8/mhGigyS8/' staging/ecii-rc1/bundle.part06_09.b64 > /tmp/bundle.part06_09.corrected.b64
+
+          cat \
+            staging/ecii-rc1/bundle.part00.b64 \
+            staging/ecii-rc1/bundle.part01.b64 \
+            staging/ecii-rc1/bundle.part02.b64 \
+            staging/ecii-rc1/bundle.part03.b64 \
+            staging/ecii-rc1/bundle.part04_05.b64 \
+            /tmp/bundle.part06_09.corrected.b64 \
+            staging/ecii-rc1/bundle.part10_13.b64 \
+            > /tmp/ecii.b64
+
           wc -c /tmp/ecii.b64 | tee artifacts/staging-diagnostics/combined-size.txt
           sha256sum /tmp/ecii.b64 | tee artifacts/staging-diagnostics/combined-b64-sha256.txt
           echo "a8f2fabf3c206f725a6a1e03d7351855cc687c13c28d82c10ae0083db9563a97  /tmp/ecii.b64" | sha256sum --check - | tee artifacts/staging-diagnostics/base64-integrity.txt
