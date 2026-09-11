@@ -1,4 +1,4 @@
-name: ECII RC1 Staged Verification
+name: ECII Final Hardening Verification
 
 on:
   push:
@@ -12,7 +12,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
 
     steps:
       - name: Checkout staging branch
@@ -41,7 +41,7 @@ jobs:
           test -f /tmp/ecii-work/ecii-modern-reference/ECII.Modern.sln
           chmod +x /tmp/ecii-work/ecii-modern-reference/scripts/*.sh
 
-      - name: Apply current ECII runtime and security patch sets
+      - name: Apply current ECII runtime and final-hardening patch sets
         shell: bash
         run: |
           set -euo pipefail
@@ -54,12 +54,149 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Run RC1 verification gate
+      - name: Run executable release gate
         working-directory: /tmp/ecii-work/ecii-modern-reference
         shell: bash
         run: ./scripts/verify-rc1.sh artifacts/rc1-verification
 
-      - name: Package verified v1.0.0-rc.1 source
+      - name: Validate production security policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/final-hardening
+          python3 - <<'PY' | tee artifacts/final-hardening/production-policy.txt
+          import json
+          from pathlib import Path
+
+          root = Path('/tmp/ecii-work/ecii-modern-reference')
+          prod = json.loads((root / 'src/ECII.Api/appsettings.Production.json').read_text())
+          program = (root / 'src/ECII.Api/Program.cs').read_text()
+
+          assert prod['Identity']['Mode'].lower() == 'oidc'
+          assert prod['Security']['EnableSwagger'] is False
+          assert prod['FailureInjection']['Scotia'].lower() == 'none'
+          assert prod['FailureInjection']['NCB'].lower() == 'none'
+          assert prod['FailureInjection']['BillingApply'] is False
+          assert 'FallbackPolicy' in program and 'RequireAuthenticatedUser' in program
+          assert 'app.MapHealthChecks("/health").AllowAnonymous();' in program
+          assert 'app.MapHealthChecks("/health/ready"' in program and ').AllowAnonymous();' in program
+
+          print('PASS: production identity mode is OIDC')
+          print('PASS: production Swagger is disabled')
+          print('PASS: production failure injection is disabled')
+          print('PASS: OIDC fallback authorization requires authenticated users')
+          print('PASS: health/readiness endpoints remain explicitly anonymous')
+          PY
+
+      - name: Generate CycloneDX SBOM
+        working-directory: /tmp/ecii-work/ecii-modern-reference
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/final-hardening/sbom
+          dotnet tool install --global CycloneDX --version 6.2.0
+          export PATH="$PATH:$HOME/.dotnet/tools"
+          dotnet-CycloneDX ECII.Modern.sln \
+            -o artifacts/final-hardening/sbom \
+            -fn bom.json \
+            -F Json \
+            -sv 1.6
+          test -s artifacts/final-hardening/sbom/bom.json
+          sha256sum artifacts/final-hardening/sbom/bom.json \
+            | tee artifacts/final-hardening/SBOM-SHA256.txt
+
+      - name: Verify migration rollback and forward replay
+        working-directory: /tmp/ecii-work/ecii-modern-reference
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f /tmp/ecii-final-migration.db
+          export ECII_DESIGN_CONNECTION='Data Source=/tmp/ecii-final-migration.db'
+          dotnet tool restore
+          dotnet ef database update \
+            --project src/ECII.Infrastructure \
+            --startup-project src/ECII.Api
+          dotnet ef database update 0 \
+            --project src/ECII.Infrastructure \
+            --startup-project src/ECII.Api
+          dotnet ef database update \
+            --project src/ECII.Infrastructure \
+            --startup-project src/ECII.Api
+          dotnet ef migrations list \
+            --project src/ECII.Infrastructure \
+            --startup-project src/ECII.Api \
+            | tee artifacts/final-hardening/migration-replay.txt
+
+      - name: Development container health smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/final-hardening
+          docker rm -f ecii-dev-smoke >/dev/null 2>&1 || true
+          docker run -d --name ecii-dev-smoke \
+            -p 18080:8080 \
+            -e ASPNETCORE_ENVIRONMENT=Development \
+            ecii-modern:1.0.0-rc.1-candidate \
+            | tee artifacts/final-hardening/dev-container-id.txt
+          trap 'docker logs ecii-dev-smoke > artifacts/final-hardening/dev-container.log 2>&1 || true; docker rm -f ecii-dev-smoke >/dev/null 2>&1 || true' EXIT
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:18080/health > artifacts/final-hardening/dev-health.json; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:18080/health/ready > artifacts/final-hardening/dev-ready.json
+          docker image inspect ecii-modern:1.0.0-rc.1-candidate --format '{{.Id}}' \
+            | tee artifacts/final-hardening/docker-image-id.txt
+
+      - name: Production OIDC and Swagger smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker rm -f ecii-prod-smoke >/dev/null 2>&1 || true
+          docker run -d --name ecii-prod-smoke \
+            -p 18081:8080 \
+            -e ASPNETCORE_ENVIRONMENT=Production \
+            -e Security__EnableHttpsRedirection=false \
+            -e Security__EnableHsts=false \
+            -e Identity__Mode=Oidc \
+            -e Identity__Authority=https://issuer.example.invalid \
+            -e Identity__Audience=ecii-api \
+            -e 'ConnectionStrings__AppDb=Data Source=/tmp/ecii-prod-smoke.db' \
+            ecii-modern:1.0.0-rc.1-candidate \
+            | tee artifacts/final-hardening/prod-container-id.txt
+          trap 'docker logs ecii-prod-smoke > artifacts/final-hardening/prod-container.log 2>&1 || true; docker rm -f ecii-prod-smoke >/dev/null 2>&1 || true' EXIT
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:18081/health > artifacts/final-hardening/prod-health.json; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:18081/health/ready > artifacts/final-hardening/prod-ready.json
+          swagger_status=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:18081/swagger/index.html)
+          api_status=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:18081/api/accounts)
+          echo "swagger_http_status=$swagger_status" | tee artifacts/final-hardening/prod-http-policy.txt
+          echo "unauthenticated_api_http_status=$api_status" | tee -a artifacts/final-hardening/prod-http-policy.txt
+          test "$swagger_status" != "200"
+          test "$api_status" = "401"
+
+      - name: Scan candidate for high-signal committed secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/final-hardening
+          root=/tmp/ecii-work/ecii-modern-reference
+          pattern='BEGIN (RSA|OPENSSH|EC) PRIVATE KEY|sk-proj-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}'
+          if grep -RInE \
+            --exclude-dir=bin \
+            --exclude-dir=obj \
+            --exclude-dir=artifacts \
+            "$pattern" "$root" \
+            | tee artifacts/final-hardening/secret-scan.txt \
+            | grep -q .; then
+            echo 'FAIL: high-signal secret pattern detected.'
+            exit 5
+          fi
+          echo 'PASS: no high-signal committed secret patterns detected.' \
+            | tee artifacts/final-hardening/secret-scan.txt
+
+      - name: Package verified final candidate source
         shell: bash
         run: |
           set -euo pipefail
@@ -69,18 +206,29 @@ jobs:
             --exclude='ecii-modern-reference/**/bin' \
             --exclude='ecii-modern-reference/**/obj' \
             --exclude='ecii-modern-reference/artifacts/rc1-verification/publish' \
-            -czf /home/runner/work/danwiz/danwiz/artifacts/release-source/ecii-modern-reference-v1.0.0-rc.1-source.tar.gz \
+            -czf /home/runner/work/danwiz/danwiz/artifacts/release-source/ecii-modern-reference-v1.0.0-final-candidate-source.tar.gz \
             ecii-modern-reference
           cd /home/runner/work/danwiz/danwiz
-          sha256sum artifacts/release-source/ecii-modern-reference-v1.0.0-rc.1-source.tar.gz \
+          sha256sum artifacts/release-source/ecii-modern-reference-v1.0.0-final-candidate-source.tar.gz \
             | tee artifacts/release-source/SHA256SUMS.txt
 
-      - name: Upload verified RC1 source
+      - name: Upload verified final candidate source
         uses: actions/upload-artifact@v4
         with:
-          name: ecii-v1.0.0-rc.1-source-${{ github.sha }}
+          name: ecii-v1.0.0-final-candidate-source-${{ github.sha }}
           path: artifacts/release-source/
           if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload final-hardening evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecii-final-hardening-${{ github.sha }}
+          path: |
+            artifacts/final-hardening/
+            /tmp/ecii-work/ecii-modern-reference/artifacts/final-hardening/
+          if-no-files-found: warn
           retention-days: 30
 
       - name: Upload staging diagnostics
@@ -92,11 +240,11 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
-      - name: Upload RC1 verification evidence
+      - name: Upload verification evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ecii-rc1-verification-${{ github.sha }}
+          name: ecii-verification-${{ github.sha }}
           path: /tmp/ecii-work/ecii-modern-reference/artifacts/
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: 30
