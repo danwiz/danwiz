@@ -1,6 +1,6 @@
 # Hi, I'm Dane Wisdom
 
-![Dane Wisdom — IT Executive, Senior Consultant, and Solutions Architect](assets/profile-banner.svg)
+![Dane Wisdom — IT Executive, Senior Consultant, and Solutions Architect](docs/assets/dane-wisdom-github-banner.jpg)
 
 **IT Executive · Senior Consultant · Solutions Architect · Founder, Wisdom Technologies**
 
@@ -34,7 +34,7 @@ I design, modernize, and operationalize dependable technology systems. My work s
 ## Selected releases
 
 - **[Wisdom IT Readiness Toolkit v0.1.0](https://github.com/danwiz/wisdom-it-readiness-toolkit/releases/tag/v0.1.0)** — validated installation, scoring, report generation, report validation, tests, and artifact upload
-- **[Sports Management System v0.10.0](https://github.com/danwiz/sports-management-system-legacy/releases/tag/v0.10.0)** — governed legacy preservation and C++20 modernization release with regression validation and explicit provenance boundaries
+- **[Sports Management System v0.11.0](https://github.com/danwiz/sports-management-system-legacy/releases/tag/v0.11.0)** — governed legacy preservation and C++20 modernization release with regression validation and explicit provenance boundaries
 - **[ECII Modern Reference Architecture v1.0.0](docs/ecii-modern/RELEASE-v1.0.0.md)** — verified .NET 8 final release with 36/36 automated tests passing, EF Core migration generation plus rollback/forward replay, clean dependency-vulnerability audit, CycloneDX SBOM, successful publish and Docker build, healthy container probes, OIDC authorization hardening, and retained provenance boundaries
 
 ## Repository governance
