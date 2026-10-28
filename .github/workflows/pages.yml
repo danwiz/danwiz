@@ -41,7 +41,7 @@ jobs:
           grep -Fq 'name="description"' docs/index.html
           grep -Fq 'og-card-1200x630.jpg' docs/index.html
           grep -Fq 'assets/favicon.png' docs/index.html
-          grep -Fq 'href="styles.css"' docs/index.html
+          grep -Eq 'href="styles\.css(\?[^"]*)?"' docs/index.html
           grep -Fq 'href="#main"' docs/index.html
           ! grep -Eiq '(TODO|FIXME|lorem ipsum|example\.com)' docs/index.html
 
