@@ -1,8 +1,8 @@
 # Hi, I'm Dane Wisdom
 
-![Dane Wisdom — IT Executive, Senior Consultant, and Solutions Architect](docs/assets/dane-wisdom-github-banner.jpg)
+![Dane Wisdom — IT Consultant, Solutions Architect, and Founder of Wisdom Technologies](docs/assets/dane-wisdom-github-banner.jpg)
 
-**IT Executive · Senior Consultant · Solutions Architect · Founder, Wisdom Technologies**
+**IT Consultant · Solutions Architect · Founder, Wisdom Technologies**
 
 I design, modernize, and operationalize dependable technology systems. My work spans IT advisory, cloud and infrastructure, cybersecurity, networking, automation, software engineering, AI-enabled workflows, and technical documentation.
 
