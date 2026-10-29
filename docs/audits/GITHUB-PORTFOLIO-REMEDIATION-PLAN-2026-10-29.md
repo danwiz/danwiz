@@ -72,3 +72,23 @@ Record: repository identity and ownership; purpose; README and architecture; sou
 **Phase 4:** re-audit all 18 repositories and all originally open issues. Close an issue only when its acceptance criteria are met and linked evidence is verified; track blockers separately.
 
 **Go/no-go:** Resume GitHub Ecosystem Setup only after P0 blockers are resolved or explicitly accepted under documented governance; no security-control bypass, no unaudited merge, no unsupported production claims.
+
+## Provenance audit supplement — 2026-10-29
+
+The following observations are from actual default-branch files; they establish source attribution, **not** fork metadata or the presence/absence of original contributions:
+
+| Repository | Source evidence | Required action |
+| --- | --- | --- |
+| Project0-Cardealership-Maven | README calls it the authoritative Java modernization target; Maven artifact `com.revature:cardealer:0.1.0-SNAPSHOT` | Reconcile with separate legacy dealership repository before consolidation |
+| Project1 | Maven `com.revature.superhuman:SuperHuman:0.0.1-SNAPSHOT`, WAR packaging | Inspect web endpoints, PostgreSQL use, tests, deployment and credentials |
+| RevatureiOS | Root README and license not found at inspected paths | Inspect Xcode project and source history; do not infer no license elsewhere |
+| HOL5 | Root README contains only `# HOL5` | Determine lab scope and build targets |
+| UIPageViewController-Post | README explicitly links Atomic Object Swift tutorial | Verify attribution and original modifications |
+| AppAuth-iOS | README identifies OpenID AppAuth SDK; Apache 2.0 LICENSE present | Verify upstream fork relation and local changes |
+| auth0-ios-swift-sample | README links Auth0 native iOS Swift quickstart; MIT license credits Auth0 Samples | Preserve Auth0 attribution; review sample configuration |
+| ioscreator | README identifies ioscreator.com tutorials, updated 2020 | Treat as external tutorial collection pending contribution audit |
+| Alamofire | README links upstream Alamofire SDK; LICENSE credits Alamofire Software Foundation | Preserve MIT license and upstream credit; inspect local changes |
+
+**Release-evidence supplement:** `wisdom-it-readiness-toolkit` README identifies published v0.1.0 while `pyproject.toml` declares `0.2.0.dev0`; CI includes Python 3.11 installed CLI tests. `sports-management-system-legacy` README identifies v0.11.0, seven tests and CPack ZIP/TGZ, still requiring independent release-asset verification. `cmp1025-programming-2` declares Java 21/Maven artifact version 0.9.0 and CI runs Spotless/tests/verify. Latest-commit workflow lookups for these three returned no runs, an inconclusive result rather than CI failure.
+
+**Audit status:** Source attribution and selected manifests verified; full source diff, workflow history, deployment, and release-asset audit remain open. Do not automatically claim third-party source as original authorship or archive/delete it.
