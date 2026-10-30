@@ -97,3 +97,16 @@ To close the remaining short-only purchase review evidence without importing the
 The tests use a disposable per-case H2 database in PostgreSQL mode, a genuine context-bound verified reviewer, and the real `JdbcPurchaseApprovalService`, `JdbcInventoryRepository`, `DealershipQueryService` and `ReviewPurchaseRequestCommand`. They do **not** prove physical PostgreSQL failover, real production principals, or equivalence of the original in-memory compensation algorithm. [Java 11/17 CI #40995418505](https://github.com/danwiz/project0-cardealership/actions/runs/40995418505) was **in progress** when the evidence register was updated. Leave dispositions pending until exact-head logs show all five tests executed, 0 skipped/failures.
 
 **No default-branch merge, competing short-branch edit, new pull request, production access, release, or deployed migration.**
+
+## Phase 9 exact-head purchase parity CI acceptance — 2026-10-29 ET
+
+**VERIFIED:** [GitHub Actions #40995418505](https://github.com/danwiz/project0-cardealership/actions/runs/40995418505) **COMPLETED SUCCESS** on immutable isolated integration candidate `6b332471f8deb6e7308a18c9960c00141b860bf2`. Both actual job logs show **`JdbcPurchaseBehaviorParityTest`: 5 executed, 0 failures/errors/skips** in Maven test and package verification on **Java 11 and Java 17**. Both total **346 tests/job, 0 failures/errors/skips**, with `BUILD SUCCESS`.
+
+**P-02, P-03, P-04, P-08, P-11 are now CI-COVERED in the isolated modern JDBC/H2 candidate**:
+- P-02: persisted reviewer removed; approval and pending-buyer disclosure denied, with zero purchase mutation.
+- P-03: authenticated reviewer sees exact immutable pending requester, customer denied.
+- P-04: unknown buyer rejected at FK-constrained *request insertion*, preserving all state. The legacy approach allowed creating an orphan then rejecting at approval; this is intentionally replaced with stronger earlier validation, **not** reproduced literally.
+- P-08: a later failed purchase at `AFTER_OWNERSHIP` rolls back without erasing an earlier committed ownership and payment plan.
+- P-11: negative/zero payment terms and invalid negative request ID denied at both command/service boundaries.
+
+**Qualification:** This closes the identified *test coverage* gaps on this isolated candidate. It is **not** a full executable equivalence certification of the short branch or a production acceptance. PostgreSQL16 independent issue #89 fault/recovery and permit/receipt CI evidence remains separately gated; these new five cases use H2 in PostgreSQL compatibility mode. Canonical repo/branch integration and owner/security signoff remain NO-GO.
