@@ -74,3 +74,9 @@ A focused test-only parity transfer was committed on the **isolated integration 
 The earlier application-session bridge (separate opt-in legacy credential upgrade followed by normal context-bound login) passed [CI #40991023039](https://github.com/danwiz/project0-cardealership/actions/runs/40991023039), exact head `768e9998b7ea9477ebfa8a8fe22d2699a98b3c91`: **339 tests on both Java 11 and Java 17**, zero failures/errors/skips, including two non-skipped `LegacyCredentialApplicationSessionIntegrationTest` cases.
 
 The 11 short-only purchase-review tests require a separate signed-off crosswalk for P-02/P-03/P-04/P-08/P-11. The old best-effort in-memory compensation algorithm is not approved for transplant into the JDBC transaction writer. No PR merge, default-branch change, production SQL, credential migration or release.
+
+## Exact-head verification — short inventory tests (2026-10-29 ET)
+
+**Verified:** [GitHub Actions #40991436945](https://github.com/danwiz/project0-cardealership/actions/runs/40991436945) completed **SUCCESS** at isolated candidate SHA `e4a24a588c8faa92cabb6f4ec0c7ca1b463550a3`. Java **11 and 17 each passed 341 tests, zero failures/errors/skips**, with Maven test and package verify BUILD SUCCESS. Both job logs show **4 non-skipped `SessionDemotionInventoryRegressionTest` cases** (including both new storage-mode tests for authenticated customers, forged administrator actor, wrong-password login, revoked/deleted employee) and **2 `LegacyCredentialApplicationSessionIntegrationTest` cases**.
+
+**Disposition update:** I-02/I-03/I-04 now **COVERED IN ISOLATED CANDIDATE AND CI-VERIFIED**, rather than awaiting test verification. They still need final integrated SHA review, short/long repository decision and independent security acceptance. P-02/P-03/P-04/P-08/P-11 remain partial pending precise test or owner-approved scope decision. This does not justify merging either competing leaf.
