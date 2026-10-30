@@ -64,3 +64,23 @@ credential submitted
 | Independent approval / production release | No signoff | **NO-GO** |
 
 This is a review and test-design artifact. It does not authorize a public credential corpus scan, credential export, production security downgrade, main/master merge or release.
+
+
+## 5. Opt-in migration implementation checkpoint — 2026-10-29 ET
+
+On the **isolated integration-candidate branch only** (`security/integration-candidate-master-pbkdf2-parity-20261029`), a **disabled-by-default** legacy credential upgrade was implemented and a new regression suite added. This does not alter `master`, #104 or the separate Maven portfolio repository.
+
+- `src/com/revature/service/LegacyPbkdf2CredentialUpgrade.java`: recognizes **only** exact `pbkdf2$120000$<16-byte salt base64>$<32-byte key base64>` from a trusted persisted account, with **512-character maximum input**, exact canonical Base64 encoding, no variable KDF iteration count or output size, fixed 120k and constant-time comparison. Must be explicitly constructed with a trusted credential writer; the normal login service has **no migrator configured**.
+- `UserLoginService.authenticate`: tries the existing strict `Pbkdf2PasswordHasher` first. Only an explicitly injected migrator may verify a historical account. Upon successful legacy verification it generates a current strict 600k hash, uses `updateCredentialIfCurrent` CAS, reloads the stored account and checks its new hash/role and rotated `sessionRevision` **before** returning an authenticated account. A stale CAS, wrong password, invalid encoding or missing migrator yields no login, not a downgrade.
+- `LegacyPbkdf2CredentialUpgradeTest`: exact historical hash rejected by default; opt-in in-memory and JDBC/H2 successful migration; wrong-password denial without writes; malformed/giant/out-of-range work factors rejected; CAS conflict denied. The tests use synthetic CI-only credentials, not real customer data.
+- The previously verified strict-master parity at SHA `2ebcebb62b7668f5e9c89393726e183c4eb8abe2` passed **331 tests each on Java 11 and 17** in [CI #40986769490](https://github.com/danwiz/project0-cardealership/actions/runs/40986769490), zero fail/error/skip, including `Pbkdf2PasswordHasherTest` four non-skipped tests.
+- The migration implementation's exact head `eadc05748a1c0481d16bf97f3edeebc086170d94` has CI [#40987971029](https://github.com/danwiz/project0-cardealership/actions/runs/40987971029) **pending when this note was authored**; **do not mark as passed until both job logs confirm the new tests**.
+
+### Explicitly still missing
+
+1. An approved operator-only / credential-only SQL role and secure migration *installation*. The normal runtime does **not** auto-migrate stored legacy accounts.
+2. A trusted inventory of actual persisted 120k account cohorts. Public GitHub CI synthetic records are **not** evidence of real data.
+3. End-to-end authenticated runtime session issuance after upgrade, role/rate-limit/audit integration, and independent reviewer signoff.
+4. Migration window expiry, special handling for restored database backups and account rollback, and production-safe failure management. No production queries or write actions were executed.
+
+**Release stays NO-GO until exact-SHA CI, authenticated runtime integration and migration/rollback controls pass independent review.**
