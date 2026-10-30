@@ -1,0 +1,217 @@
+{
+  "schema_version": "1.0",
+  "prepared_et": "2026-10-29",
+  "purpose": "Review-only, machine-readable release gates for the Car Dealership canonical integration",
+  "release_authorized": false,
+  "disposition": "NO-GO",
+  "reference_issue": "https://github.com/danwiz/project0-cardealership/issues/85",
+  "baseline": {
+    "source_master": {
+      "repository": "danwiz/project0-cardealership",
+      "branch": "master",
+      "sha": "90741d3abe51d9cc002aaeb1dacae27b933fba10",
+      "protected": true
+    },
+    "integration_candidate": {
+      "repository": "danwiz/project0-cardealership",
+      "branch": "security/integration-candidate-master-pbkdf2-parity-20261029",
+      "sha": "0cbad314956ad1d36542d30afa6519a1bbfecdce"
+    },
+    "long_draft": {
+      "pr": 104,
+      "sha": "45eccdc73ce36d4298326498a3603e2363251fd6"
+    },
+    "short_draft": {
+      "pr": 84,
+      "sha": "086fbf91294f74fe4bd967256498ef94e92c501a"
+    },
+    "proposed_portfolio_master": {
+      "repository": "danwiz/Project0-Cardealership-Maven",
+      "sha": "a8dce295b9ab45ca6e896035bb81788bd4aff217"
+    },
+    "source_open_draft_prs": 91
+  },
+  "last_verified_ci": {
+    "run": "https://github.com/danwiz/project0-cardealership/actions/runs/40997446982",
+    "sha": "0cbad314956ad1d36542d30afa6519a1bbfecdce",
+    "conclusion": "success",
+    "java_11_tests": 346,
+    "java_17_tests": 346,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "diagnostics_java_11": "success",
+    "diagnostics_java_17": "success",
+    "scope": "isolated pre-promotion candidate only"
+  },
+  "status_vocabulary": [
+    "VERIFIED_ON_CANDIDATE",
+    "DOCUMENTED_NOT_ACCEPTED",
+    "OPEN",
+    "NOT_STARTED",
+    "NOT_APPLICABLE"
+  ],
+  "gates": [
+    {
+      "id": "G00",
+      "category": "repository-governance",
+      "requirement": "Owner accepts canonical source/destination ADR A/B/C and publication mode",
+      "status": "OPEN",
+      "owner": "repository owner",
+      "evidence": "docs/audits/ADR-CAR-DEALERSHIP-CANONICAL-REPOSITORY-2026-10-29.md",
+      "blocks_promotion": true
+    },
+    {
+      "id": "G01",
+      "category": "historical-preservation",
+      "requirement": "Independent read-only Git bundle backup, verified restore checksum and complete third-party source provenance",
+      "status": "DOCUMENTED_NOT_ACCEPTED",
+      "owner": "maintainer + archival reviewer",
+      "evidence": "docs/audits/CAR-DEALERSHIP-MASTER-BASELINE-PRESERVATION-MANIFEST-2026-10-29.md",
+      "blocks_promotion": true
+    },
+    {
+      "id": "G02",
+      "category": "source-history",
+      "requirement": "Resolve master-only 16 commits and 109 short-exclusive commits by exact path/behavior and signed conflict decisions; preserve PR graph",
+      "status": "DOCUMENTED_NOT_ACCEPTED",
+      "owner": "integration maintainer",
+      "evidence": "docs/audits/CAR-DEALERSHIP-INTEGRATION-DECISION-REGISTER-2026-10-29.md",
+      "blocks_promotion": true
+    },
+    {
+      "id": "G03",
+      "category": "security",
+      "requirement": "Preserve master PBKDF2 600k bounded parser and exact tests on isolated candidate",
+      "status": "VERIFIED_ON_CANDIDATE",
+      "owner": "security reviewer",
+      "evidence": "https://github.com/danwiz/project0-cardealership/actions/runs/40986769490",
+      "blocks_promotion": false
+    },
+    {
+      "id": "G04",
+      "category": "security",
+      "requirement": "Opt-in legacy 120k CAS credential upgrade, session revision rotation and real application-context reauthentication on isolated candidate",
+      "status": "VERIFIED_ON_CANDIDATE",
+      "owner": "security reviewer",
+      "evidence": "https://github.com/danwiz/project0-cardealership/actions/runs/40991023039",
+      "blocks_promotion": false
+    },
+    {
+      "id": "G05",
+      "category": "security-operations",
+      "requirement": "Approved limited credential writer, migration cohort policy, rate limits, audit and rollback rehearsal, never default migration",
+      "status": "NOT_STARTED",
+      "owner": "DBA + security + application owner",
+      "evidence": "docs/audits/PBKDF2-INTEGRATION-AND-LEGACY-CREDENTIAL-MIGRATION-PLAN-2026-10-29.md",
+      "blocks_promotion": true
+    },
+    {
+      "id": "G06",
+      "category": "behavior-parity",
+      "requirement": "22 short-branch test invariants mapped and inventoried; inventory and JDBC purchase parity covered on isolated candidate",
+      "status": "VERIFIED_ON_CANDIDATE",
+      "owner": "QA lead",
+      "evidence": "https://github.com/danwiz/project0-cardealership/actions/runs/40995418505",
+      "blocks_promotion": false
+    },
+    {
+      "id": "G07",
+      "category": "ci",
+      "requirement": "Candidate workflow protects master push trigger and four Java11/17 verify/diagnostics jobs",
+      "status": "VERIFIED_ON_CANDIDATE",
+      "owner": "CI maintainer",
+      "evidence": "https://github.com/danwiz/project0-cardealership/actions/runs/40997446982",
+      "blocks_promotion": false
+    },
+    {
+      "id": "G08",
+      "category": "transaction-integrity",
+      "requirement": "PostgreSQL16 actual pre-COMMIT and post-COMMIT-ACK TCP cut and durable readback",
+      "status": "VERIFIED_ON_CANDIDATE",
+      "owner": "DBA + QA",
+      "evidence": "https://github.com/danwiz/project0-cardealership/actions/runs/40985413694",
+      "blocks_promotion": false
+    },
+    {
+      "id": "G09",
+      "category": "transaction-integrity",
+      "requirement": "Physical backend crash during COMMIT, primary failover, standby promotion, WAL and stale-replica consistency",
+      "status": "NOT_STARTED",
+      "owner": "SRE + DBA",
+      "evidence": "docs/audits/POSTGRESQL-PURCHASE-FAILURE-MODE-ACCEPTANCE-MATRIX-2026-10-29.md",
+      "blocks_promotion": true
+    },
+    {
+      "id": "G10",
+      "category": "db-least-privilege",
+      "requirement": "Independent production-capable issuer/writer/reconciler roles, read-only receipts, TLS, definer grants and auditable request idempotency",
+      "status": "DOCUMENTED_NOT_ACCEPTED",
+      "owner": "DBA + security",
+      "evidence": "https://github.com/danwiz/project0-cardealership/issues/89",
+      "blocks_promotion": true
+    },
+    {
+      "id": "G11",
+      "category": "source-cleanup",
+      "requirement": "PR #46 docs and 12 binaries disposition; no original artifacts destroyed; no generated target/bin in portfolio artifact",
+      "status": "DOCUMENTED_NOT_ACCEPTED",
+      "owner": "maintainer",
+      "evidence": "https://github.com/danwiz/project0-cardealership/pull/46",
+      "blocks_promotion": true
+    },
+    {
+      "id": "G12",
+      "category": "destination-compatibility",
+      "requirement": "Port selected source to approved destination with Java11/17 policy, JUnit5, JDBC driver, source tree layout and Maven coordinates reviewed",
+      "status": "NOT_STARTED",
+      "owner": "architecture + build owner",
+      "evidence": "docs/audits/CAR-DEALERSHIP-INTEGRATION-PROMOTION-RUNBOOK-2026-10-29.md",
+      "blocks_promotion": true
+    },
+    {
+      "id": "G13",
+      "category": "legal-and-supply-chain",
+      "requirement": "Authorship and license approval, dependency/secret scan, SBOM and reproducible clean artifacts; Project1 vulnerability verdict separately resolved",
+      "status": "NOT_STARTED",
+      "owner": "security + license reviewer",
+      "evidence": "docs/audits/CAR-DEALERSHIP-INTEGRATION-PROMOTION-RUNBOOK-2026-10-29.md",
+      "blocks_promotion": true
+    },
+    {
+      "id": "G14",
+      "category": "release-candidate",
+      "requirement": "Full Java/test/PostgreSQL CI re-executed against exact post-integration final SHA with no unapproved skipped cases",
+      "status": "NOT_STARTED",
+      "owner": "QA + CI",
+      "evidence": null,
+      "blocks_promotion": true
+    },
+    {
+      "id": "G15",
+      "category": "operational-readiness",
+      "requirement": "Backups, restore/rollback and data compatibility rehearsal with recorded RPO/RTO and owner signoff",
+      "status": "NOT_STARTED",
+      "owner": "DBA + SRE + product owner",
+      "evidence": null,
+      "blocks_promotion": true
+    },
+    {
+      "id": "G16",
+      "category": "release-governance",
+      "requirement": "Owner/DBA/security independent approvals, reviewed PR, signed tag, validated release assets and README/portfolio links",
+      "status": "NOT_STARTED",
+      "owner": "repository owner",
+      "evidence": null,
+      "blocks_promotion": true
+    }
+  ],
+  "restrictions": [
+    "No automatic merge, squash or force push of competing 91 PRs",
+    "No release tag or publication",
+    "No production schema/credential/account migration",
+    "No cross-repository import before ADR approval",
+    "No claim of production or staging availability from CI"
+  ],
+  "notes": "VERIFIED_ON_CANDIDATE is not accepted on the future final SHA. Re-query heads and re-run every necessary gate after changes."
+}
