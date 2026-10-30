@@ -85,3 +85,10 @@ The source candidate and this derived merged tree still require owner/DBA/securi
 | Production release | **NO-GO** | All remaining 17-gate acceptance requirements |
 
 This is the first **passing executable master-ancestry integration prototype**, **not** a ready-to-merge or production release. The protected source `master` is unchanged.
+
+
+## 7. Current isolated branch CI also passed after diagnostic workflow commits
+
+The source integration branch's latest head `755a46aef24c9ea8a254e958e0a7dc8a9d76e45b` (adds only diagnostic workflows since original pinned source candidate) independently passed [normal Maven CI #41002545986](https://github.com/danwiz/project0-cardealership/actions/runs/41002545986): **Java 11 and Java 17 each 346 tests, 0 failures/errors/skips**, both Maven test/verify BUILD SUCCESS, plus **both diagnostics jobs success**. This corroborates that the audit-only workflow commits did not disturb the existing source CI.
+
+**Keep distinct:** the normal Maven CI run tests branch head `755a46...`; the *disposable actual master/candidate two-parent merge* is independently tested by run `#41002545989` and creates tree `e21385...`. Neither is a published or accepted product release.
