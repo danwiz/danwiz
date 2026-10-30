@@ -70,8 +70,9 @@
       "owner": "maintainer + archival reviewer",
       "evidence": "docs/audits/CAR-DEALERSHIP-MASTER-BASELINE-PRESERVATION-MANIFEST-2026-10-29.md",
       "blocks_promotion": true,
-      "additional_evidence": "docs/audits/tools/rehearse-dealership-source-merge.sh",
-      "remaining_obligation": "Produce and independently verify a complete off-GitHub Git bundle and restore when network is available"
+      "additional_evidence": "docs/audits/CAR-DEALERSHIP-PHASE16-ARCHIVE-AND-THREE-ANCESTRY-RECONCILIATION-2026-10-30.md",
+      "remaining_obligation": "Complete source authorship/licensing review, ongoing archive custody/retention policy, supplemental GitHub PR/issue and LFS scope if applicable; owner signs historical evidence.",
+      "verified_substep": "Independent GitHub historical all-ref bundle produced, SHA256 checked, Git clone restore+fsck successful, uploaded to private OneDrive and raw file re-downloaded byte-identical"
     },
     {
       "id": "G02",
@@ -81,9 +82,9 @@
       "owner": "integration maintainer",
       "evidence": "docs/audits/CAR-DEALERSHIP-INTEGRATION-DECISION-REGISTER-2026-10-29.md",
       "blocks_promotion": true,
-      "additional_evidence": "docs/audits/CAR-DEALERSHIP-SHORT-ONLY-SOURCE-DISPOSITION-AND-LOGIN-TAG-REVIEW-2026-10-30.md",
-      "remaining_obligation": "Owner approves nine short-only file dispositions and 15 short-side conflict decisions; independently preserve Git history; prepare durable reviewed source integration and exact-final-SHA CI.",
-      "verified_substep": "Actual Git merges executed in disposable CI: 6 master conflicts plus explicit seventh security-tagged auto-merge fix; final corrected merged tree exactly equals validated candidate tree and passed 346 tests on both JDK 11 and 17."
+      "additional_evidence": "docs/audits/CAR-DEALERSHIP-PHASE16-ARCHIVE-AND-THREE-ANCESTRY-RECONCILIATION-2026-10-30.md",
+      "remaining_obligation": "Owner accepts explicit 15 short + six master path decisions and nine short-exclusive exclusions; create approved durable review ref, rerun CI on that exact remote commit and review API/workflow policy.",
+      "verified_substep": "Actual offline merge of short+candidate (15 conflicts + nine explicit exclusions) and protected master (six conflicts + case-safe login test) produced exact original candidate Git tree; local combined Git ancestry fsck pass."
     },
     {
       "id": "G03",
@@ -409,5 +410,51 @@
       "java11": "success",
       "java17": "success"
     }
+  },
+  "historical_git_archive": {
+    "state": "OFF_GITHUB_BACKUP_AND_CLOUD_READBACK_VERIFIED_LEGAL_PROVENANCE_PENDING",
+    "run": "https://github.com/danwiz/project0-cardealership/actions/runs/41047811594",
+    "archive_source_workflow_commit": "6db63674d0ab4ddfa93470d3ff38c98695dbf122",
+    "github_artifact_id": 12972524130,
+    "github_artifact_retention_days": 1,
+    "onedrive_item": "https://onedrive.live.com?cid=0F85277D99DDE0A6&id=F85277D99DDE0A6!s4c844c1d298e45fcbc05a28a17672551",
+    "onedrive_custody_manifest": "https://onedrive.live.com?cid=0F85277D99DDE0A6&id=F85277D99DDE0A6!s80c715b9c9bb460084c0fadb854ddf11",
+    "zip_bytes": 1058812,
+    "zip_sha256": "ffe2ce7fc9b4ce0c78743a8437e4fd2d50ae06ddb27eeb2f402253384a1d7b7d",
+    "bundle_bytes": 1112489,
+    "bundle_sha256": "41ad1f09a546d1fac8c9e850a5f00739b92443d971dd43535238969433113ff3",
+    "restored_git_refs": 296,
+    "reachable_commits": 680,
+    "local_bundle_verify": "PASS",
+    "local_full_git_fsck": "PASS",
+    "cloud_re_download_matches_original_zip_byte_for_byte": true,
+    "google_drive_folder": "https://drive.google.com/drive/folders/1QLcG8zbX36EsLd9MzZnO17WzTJgnhXqr",
+    "google_drive_archive_uploaded": false,
+    "limitations": [
+      "No PR/issue/comments/history beyond Git refs",
+      "No Git LFS object provenance",
+      "No accepted author/license review",
+      "No verified operational retention or recovery rotation policy"
+    ]
+  },
+  "local_three_ancestry_rehearsal": {
+    "state": "LOCAL_ONLY_ALL_THREE_GIT_BRANCH_HISTORIES_PRESERVED_TREE_EQUALS_TESTED_CANDIDATE",
+    "source": "docs/audits/CAR-DEALERSHIP-PHASE16-ARCHIVE-AND-THREE-ANCESTRY-RECONCILIATION-2026-10-30.md",
+    "source_candidate": "0cbad314956ad1d36542d30afa6519a1bbfecdce",
+    "short_ref": "086fbf91294f74fe4bd967256498ef94e92c501a",
+    "master_ref": "90741d3abe51d9cc002aaeb1dacae27b933fba10",
+    "short_candidate_local_commit": "cbe283d5fb0fd0b885f6a3abdeeaa744096c5464",
+    "combined_local_commit": "a06d6190909ebb46848e6b7e3f0150121885a1cb",
+    "source_tree": "c2887034b4ef819f1d0429a25a024c6a1acb35ac",
+    "tree_equal_to_tested_candidate": true,
+    "short_conflicts_selected_from_candidate": 15,
+    "short_only_legacy_paths_excluded": 9,
+    "master_conflicts_selected_from_candidate": 6,
+    "security_tag_test_restored_from_candidate": true,
+    "new_source_files_or_changes": 0,
+    "local_fsck": "PASS",
+    "owner_approved": false,
+    "pushed_remote": false,
+    "ci_tested_at_local_combined_commit": false
   }
 }
