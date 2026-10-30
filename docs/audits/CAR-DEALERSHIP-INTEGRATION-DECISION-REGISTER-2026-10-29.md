@@ -157,3 +157,14 @@ New long head [draft #104](https://github.com/danwiz/project0-cardealership/pull
 - **No automatic conflict resolution:** 16 `master`-exclusive commits and four short-branch PRs remain history from separate lines. This is a reviewed functional/provenance disposition, **not a Git merge, accepted canonical Maven migration, or authorization to publish**.
 
 **Owner/DBA/security approval and the broader release NO-GO are unchanged.**
+
+## Phase 10 full four-job CI acceptance (2026-10-29 ET)
+
+The isolated modernization candidate `security/integration-candidate-master-pbkdf2-parity-20261029` at **`0cbad314956ad1d36542d30afa6519a1bbfecdce`** completed [GitHub Actions #40997446982](https://github.com/danwiz/project0-cardealership/actions/runs/40997446982) **SUCCESS**. Both Java `verify` jobs passed **346 tests** with **zero failures/errors/skips** and Maven package `BUILD SUCCESS`. Both newly restored independent `diagnostics` jobs passed, downloading their diagnostics artifacts and printing the expected build success. A non-failing actions/download-artifact Node.js 20 deprecation/forced Node.js 24 warning was observed; track for future action upgrades.
+
+**Updated disposition of the nine `master`-side paths:**
+- Two PBKDF2 implementation/test blobs **byte-for-byte equal** to protected source master.
+- One CI workflow **semantically reconciled and four-job CI verified on isolated branch** (master push trigger, separate downloadable diagnostics, PG16/Java11/17 retained).
+- Six master historical characterization suites **preserved with exact source SHA/blobs and method-level original-vs-corrected behavior mapping** in [new manifest](CAR-DEALERSHIP-MASTER-BASELINE-PRESERVATION-MANIFEST-2026-10-29.md); not copied as defective modern expectations.
+
+The literal `master` has **not** been merged or pushed; an owner must still review source history/licensing, short/long PR semantics, and canonical Maven destination. These are **functional/CI source-review dispositions**, not an automatic resolution of 16 master-exclusive Git commits or an approved release.
