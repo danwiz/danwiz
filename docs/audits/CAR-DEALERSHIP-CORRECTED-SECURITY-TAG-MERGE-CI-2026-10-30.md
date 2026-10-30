@@ -47,3 +47,20 @@ Both actual artifact `auto-merge-vs-candidate.txt` files are **empty**: there is
 ## Additional ordinary branch-head CI after the workflow change
 
 The isolated source branch at workflow commit `dc1e596bb9efbe610bb6beedbf09a76184adb59c` additionally passed [normal four-job Maven CI #41004556161](https://github.com/danwiz/project0-cardealership/actions/runs/41004556161): Java 11 and 17 each **346 tests, zero failures/errors/skips**, with both independent Maven diagnostics jobs **SUCCESS**. This is separate from the corrected actual disposable master/modernization merge CI #41004555990, which has both local merge parents and identical validated source-tree SHA. Neither test run grants production or source-integration approval.
+
+
+## Phase 15 — Executable case-sensitive SECURITY tag filter
+
+**An actual filtered test execution is now verified**, not just a source annotation inspection: [disposable merged-source GitHub Actions #41016912390](https://github.com/danwiz/project0-cardealership/actions/runs/41016912390), workflow-head `621e525aab8f57b6422c1f7e66d0d46f725b0713` and frozen two-parent source-tree `c2887034b4ef819f1d0429a25a024c6a1acb35ac`, **COMPLETED SUCCESS** on Java **11 and 17** with disposable PostgreSQL16. Each job ran **346 full-suite tests** (0 failed/errored/skipped), then a separate Maven Surefire selection:
+
+`mvn --batch-mode --no-transfer-progress -Dgroups=SECURITY -Dtest=UserLoginServiceCharacterizationTest -DfailIfNoTests=true test`
+
+Both Java runners executed **exactly two** selected test methods with **0 failures/errors/skips**, and independently parsed the generated Surefire XML to require the exact set:
+- `authenticationDoesNotPrintStoredPasswordToStandardOutput`
+- `registrationStoresAnEncodedPasswordInsteadOfPlaintext`
+
+A zero-test pass, lowercase historical `security` tag, or additional/missing method is explicitly treated as a CI failure. This directly verifies case-sensitive selection in the corrected merged source rather than inferring it from annotations or the unfiltered 346 total.
+
+**Recurring protection:** A second change to the isolated candidate's normal `.github/workflows/maven-ci.yml` at `6802dadc7e68e663d3945c5f4d38417617978132` adds the same exact-name XML assertion on each Java matrix job, while copying full-suite Surefire reports before the filtered rerun to avoid overwriting the evidence of 346 original tests. [Normal CI #41017295257](https://github.com/danwiz/project0-cardealership/actions/runs/41017295257) was **running at this checkpoint**; its success **must be verified independently** before marking the new standard workflow gate accepted.
+
+**Scope and governance unchanged:** this is isolated CI configuration and a temporary two-parent merge; it is not a release, default-branch merge, approved short-branch source disposition or production principal/failover proof.
