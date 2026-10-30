@@ -128,7 +128,9 @@
       "status": "VERIFIED_ON_CANDIDATE",
       "owner": "CI maintainer",
       "evidence": "https://github.com/danwiz/project0-cardealership/actions/runs/40997446982",
-      "blocks_promotion": false
+      "blocks_promotion": false,
+      "tag_filter_proof": "https://github.com/danwiz/project0-cardealership/actions/runs/41016912390",
+      "recurring_tag_filter_state": "CI pending exact workflow SHA"
     },
     {
       "id": "G08",
@@ -352,5 +354,36 @@
     "skipped": 0,
     "diagnostics_jobs": "both successful",
     "scope": "isolated candidate with audit workflow updates, not a protected master merge or production build"
+  },
+  "junit_tag_selection": {
+    "status": "VERIFIED_ON_DISPOSABLE_MERGE_STANDARD_CI_PENDING",
+    "purpose": "prevent silent regression of uppercase SECURITY filter following master auto-merge",
+    "isolated_merge_run": "https://github.com/danwiz/project0-cardealership/actions/runs/41016912390",
+    "isolated_merge_workflow_head": "621e525aab8f57b6422c1f7e66d0d46f725b0713",
+    "frozen_merged_tree": "c2887034b4ef819f1d0429a25a024c6a1acb35ac",
+    "java11": {
+      "full_tests": 346,
+      "security_filtered_tests": 2,
+      "filtered_failed": 0,
+      "filtered_errored": 0,
+      "filtered_skipped": 0,
+      "result": "success"
+    },
+    "java17": {
+      "full_tests": 346,
+      "security_filtered_tests": 2,
+      "filtered_failed": 0,
+      "filtered_errored": 0,
+      "filtered_skipped": 0,
+      "result": "success"
+    },
+    "expected_test_method_names": [
+      "authenticationDoesNotPrintStoredPasswordToStandardOutput",
+      "registrationStoresAnEncodedPasswordInsteadOfPlaintext"
+    ],
+    "recurring_workflow_commit": "6802dadc7e68e663d3945c5f4d38417617978132",
+    "recurring_ci_run": "https://github.com/danwiz/project0-cardealership/actions/runs/41017295257",
+    "recurring_ci_status": "in_progress_at_checkpoint",
+    "accepted_release_gate_impact": "None; G07 candidate CI source security verified but release remains NO-GO"
   }
 }
