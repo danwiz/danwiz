@@ -47,11 +47,11 @@ Candidate workflow commit [`0cbad314956ad1d36542d30afa6519a1bbfecdce`](https://g
 - the separate `diagnostics` job from master, using current `actions/download-artifact@v6`;
 - existing Java 11/17, disposable PostgreSQL 16, security/strategy branch coverage, `contents: read`, and Maven failure diagnostics.
 
-**Validation is pending:** [Actions run #40997446982](https://github.com/danwiz/project0-cardealership/actions/runs/40997446982) on the exact candidate commit. A green run on the isolated branch does not itself test an actual push to protected `master`, because no such push is authorized or performed.
+**Exact-head CI VERIFIED:** [Actions run #40997446982](https://github.com/danwiz/project0-cardealership/actions/runs/40997446982) **COMPLETED SUCCESS** at `0cbad314956ad1d36542d30afa6519a1bbfecdce`. Java **11 and 17 each passed 346 tests, zero failures/errors/skips** during test and package verify. Both restored **Diagnostics for Java 11/17** jobs completed successfully, each downloading its Maven diagnostics artifact and printing `BUILD SUCCESS`. The action logs also included a non-failing Node.js 20 deprecation/Node.js 24 compatibility warning for `actions/download-artifact@v6`; track in ordinary dependency reviews. A green run on the isolated branch does not itself test an actual push to protected `master`, because no such push is authorized or performed.
 
 ## Release-level reconciliation gates
 
-1. Verify the workflow's new Java11/17 `verify` and independent `diagnostics` jobs complete successfully on the exact head; inspect log uploads and avoid silently dropping failure diagnostics.
+1. **CI VERIFIED ON CANDIDATE:** the workflow's Java 11/17 `verify` and two independent `diagnostics` jobs completed successfully at SHA `0cbad314956ad1d36542d30afa6519a1bbfecdce`, with downloaded log artifacts; re-verify on any final integrated SHA and explicitly verify default-branch event semantics only after authorized promotion.
 2. Run master characterization tests against the preserved master source in an **archival or pre-change verification workflow**, not against modern code expecting intentionally fixed bugs. Copying or rewriting tests into the modern suite could conceal changes in meaning.
 3. Confirm all nine master-side paths received explicit code, test or preservation disposition and that other master-only commits contain no unseen runtime/CI changes.
 4. The full repository still has 16 master-exclusive commits, 91 competing draft PRs, and a canonical Maven destination decision pending. **This manifest does not merge those commits or settle the destination.**
