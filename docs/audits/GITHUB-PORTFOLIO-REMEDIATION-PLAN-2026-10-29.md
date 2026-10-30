@@ -235,3 +235,11 @@ Continuing from the exact-head **341-test** Java 11/17 CI success on `e4a24a588c
 **CI pending:** [Maven GitHub Actions #40995418505](https://github.com/danwiz/project0-cardealership/actions/runs/40995418505) testing this exact commit on Java 11 and 17. Do not mark these five cases completed until non-skipped test lines and both job conclusions are verified. [22-case behavioral parity crosswalk](CAR-DEALERSHIP-SHORT-BRANCH-BEHAVIORAL-PARITY-2026-10-29.md) and [issue #85](https://github.com/danwiz/project0-cardealership/issues/85#issuecomment-6513964265) updated.
 
 **Release and integration still NO-GO:** no provenance or canonical Maven repo owner approval, no final resolved master/short integrated candidate, no PostgreSQL failover and production issuer/reconciler or independent security/DBA acceptance. No default-branch merge, new PR, production database, cloud credential, deployment or release.
+
+## Phase 9 exact-head purchase parity CI acceptance — 2026-10-29 ET
+
+**Previous five-case pending status superseded.** Isolated integration candidate `6b332471f8deb6e7308a18c9960c00141b860bf2` passed [GitHub Actions Maven CI #40995418505](https://github.com/danwiz/project0-cardealership/actions/runs/40995418505) **COMPLETED SUCCESS**. Both Java 11 and 17 job logs confirm **346 total tests each**, 0 fail/error/skip, including **five `JdbcPurchaseBehaviorParityTest` cases** executed and passing in test and verify phases.
+
+P-02/P-03/P-04/P-08/P-11 are now covered on the **isolated JDBC/H2 candidate**, complementing the previous I-02/I-03/I-04 inventory parity and verified credential-session integration. The modern schema's FK rejects nonexistent buyer requests at insertion rather than allowing legacy orphan requests. This is a stronger transactional boundary, not evidence of identical original legacy behavior.
+
+[22-case short-branch behavioral parity register](CAR-DEALERSHIP-SHORT-BRANCH-BEHAVIORAL-PARITY-2026-10-29.md) updated. The five-case proof does **not** merge the competing branches or establish PostgreSQL failover and production-authenticated receipt writer/reconciler. Issue #85 P0, #89, Project1 vulnerability scanning, canonical-repo ADR, independent review and complete integrated-release SHA are still **NO-GO**. Open PR count remains **115** because no new PR was opened.
