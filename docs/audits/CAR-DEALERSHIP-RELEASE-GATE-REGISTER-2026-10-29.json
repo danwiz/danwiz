@@ -68,7 +68,9 @@
       "status": "DOCUMENTED_NOT_ACCEPTED",
       "owner": "maintainer + archival reviewer",
       "evidence": "docs/audits/CAR-DEALERSHIP-MASTER-BASELINE-PRESERVATION-MANIFEST-2026-10-29.md",
-      "blocks_promotion": true
+      "blocks_promotion": true,
+      "additional_evidence": "docs/audits/tools/rehearse-dealership-source-merge.sh",
+      "remaining_obligation": "Produce and independently verify a complete off-GitHub Git bundle and restore when network is available"
     },
     {
       "id": "G02",
@@ -77,7 +79,9 @@
       "status": "DOCUMENTED_NOT_ACCEPTED",
       "owner": "integration maintainer",
       "evidence": "docs/audits/CAR-DEALERSHIP-INTEGRATION-DECISION-REGISTER-2026-10-29.md",
-      "blocks_promotion": true
+      "blocks_promotion": true,
+      "additional_evidence": "docs/audits/CAR-DEALERSHIP-THREE-WAY-BLOB-COLLISION-INVENTORY-2026-10-29.json",
+      "remaining_obligation": "Run actual git merge-tree on full local objects, adjudicate 22 distinct two-sided paths, then review merged final SHA."
     },
     {
       "id": "G03",
@@ -213,5 +217,28 @@
     "No cross-repository import before ADR approval",
     "No claim of production or staging availability from CI"
   ],
-  "notes": "VERIFIED_ON_CANDIDATE is not accepted on the future final SHA. Re-query heads and re-run every necessary gate after changes."
+  "notes": "VERIFIED_ON_CANDIDATE is not accepted on the future final SHA. Re-query heads and re-run every necessary gate after changes.",
+  "git_object_preflight": {
+    "capture_date_et": "2026-10-29",
+    "status": "VERIFIED_BLOB_SCREEN_ONLY",
+    "source_file": "docs/audits/CAR-DEALERSHIP-THREE-WAY-BLOB-COLLISION-INVENTORY-2026-10-29.json",
+    "triage": "docs/audits/CAR-DEALERSHIP-THREE-WAY-COLLISION-TRIAGE-2026-10-29.md",
+    "local_rehearsal_helper": "docs/audits/tools/rehearse-dealership-source-merge.sh",
+    "complete_git_trees": 5,
+    "master_vs_candidate": {
+      "different_two_sided_blob_paths": 7,
+      "identical_two_sided_blob_paths": 2,
+      "actual_merge_conflicts_confirmed": false
+    },
+    "short_vs_candidate": {
+      "different_two_sided_blob_paths": 15,
+      "identical_two_sided_blob_paths": 1,
+      "add_add_distinct": 2,
+      "actual_merge_conflicts_confirmed": false
+    },
+    "offline_git_clone_attempt": "BLOCKED_DNS_RESOLUTION",
+    "local_git_bundle_created": false,
+    "full_git_merge_tree_executed": false,
+    "approval_effect": "NONE. Gate G01/G02 remain blocking."
+  }
 }
