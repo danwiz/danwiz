@@ -1,0 +1,300 @@
+{
+  "version": "1.0",
+  "captured_et": "2026-10-29",
+  "source_repository": "danwiz/project0-cardealership",
+  "type": "GIT_BLOB_THREE_WAY_SCREEN_NOT_MERGE_TREE",
+  "mergetree_executed": false,
+  "offline_git_bundle_executed": false,
+  "git_objects": [
+    {
+      "ref": "master",
+      "commit": "90741d3abe51d9cc002aaeb1dacae27b933fba10",
+      "blob_count": 46,
+      "tree_complete": true
+    },
+    {
+      "ref": "candidate",
+      "commit": "0cbad314956ad1d36542d30afa6519a1bbfecdce",
+      "blob_count": 267,
+      "tree_complete": true
+    },
+    {
+      "ref": "short",
+      "commit": "086fbf91294f74fe4bd967256498ef94e92c501a",
+      "blob_count": 62,
+      "tree_complete": true
+    },
+    {
+      "ref": "masterBase",
+      "commit": "9c242f9880a18a7749621a6ed5f6d53d3ee5fcdc",
+      "blob_count": 46,
+      "tree_complete": true
+    },
+    {
+      "ref": "shortBase",
+      "commit": "ad8d03574c7f048b236c9d24f0c03ac54dffcbd7",
+      "blob_count": 50,
+      "tree_complete": true
+    }
+  ],
+  "screens": [
+    {
+      "id": "MASTER_TO_CANDIDATE",
+      "base_ref": "9c242f9880a18a7749621a6ed5f6d53d3ee5fcdc",
+      "left_ref": "90741d3abe51d9cc002aaeb1dacae27b933fba10",
+      "right_ref": "0cbad314956ad1d36542d30afa6519a1bbfecdce",
+      "distinct_two_sided_paths": [
+        {
+          "path": ".github/workflows/maven-ci.yml",
+          "base_blob": "4863182580df6e32d13d580a230cc1ff3cede704",
+          "left_blob": "20b37da0babdf076898557afa52827d8a179d3f4",
+          "right_blob": "093bc0e8fad0c85b9c74c864f1ba4021c0467667",
+          "left_size": 3428,
+          "right_size": 8986,
+          "kind": "modify_modify"
+        },
+        {
+          "path": "src/test/java/com/revature/DAOService/DAOServiceCharacterizationTest.java",
+          "base_blob": "7843254e006d46c75a12170c2d3b42fcb84cce24",
+          "left_blob": "8e53b37d1e2dc4a6f26ba5ddf9c97a01561ea146",
+          "right_blob": "e9b7cd2588ee30b075c9fc435a6eaeb765bb68c6",
+          "left_size": 2799,
+          "right_size": 2852,
+          "kind": "modify_modify"
+        },
+        {
+          "path": "src/test/java/com/revature/cardealer/CarDealershipCharacterizationTest.java",
+          "base_blob": "10c2415d7db39262617617a987d80e1b8200eb8b",
+          "left_blob": "f3b3ca38b07ec4c74875fda6de903c24f8abe4c4",
+          "right_blob": "ee2a5a2d0f59b2a3072b8c9878e4a872a817150f",
+          "left_size": 3317,
+          "right_size": 5560,
+          "kind": "modify_modify"
+        },
+        {
+          "path": "src/test/java/com/revature/cardealer/OfferCharacterizationTest.java",
+          "base_blob": "00e4e18d0d6d3988d5f74b4abd56f60607d628cd",
+          "left_blob": "46800704393aa0b809a48a5c8ab255e0c19d560c",
+          "right_blob": "0019d59a01db0219c32559ec4ae044e0ec557f81",
+          "left_size": 3791,
+          "right_size": 4976,
+          "kind": "modify_modify"
+        },
+        {
+          "path": "src/test/java/com/revature/cardealer/PaymentsCharacterizationTest.java",
+          "base_blob": "18f76ebe20d3b52834fd951f9e883a08277dac81",
+          "left_blob": "5cae95cd414b9b04c048fb1f47a941598953987d",
+          "right_blob": "b24ee2907e6bb8b114ca4022ef1cffc91682d2d0",
+          "left_size": 2733,
+          "right_size": 5620,
+          "kind": "modify_modify"
+        },
+        {
+          "path": "src/test/java/com/revature/service/RoleLoginServiceCharacterizationTest.java",
+          "base_blob": "6876239320ea67ad16d0a0ee2752754b5f5aefe1",
+          "left_blob": "e982322e0c1222cdbe264dab675cd053fff75c45",
+          "right_blob": "f4b11edfc2d8eb40a01e2ca3d4259582576b18cd",
+          "left_size": 4173,
+          "right_size": 6260,
+          "kind": "modify_modify"
+        },
+        {
+          "path": "src/test/java/com/revature/service/UserLoginServiceCharacterizationTest.java",
+          "base_blob": "f93f737b797eb43288989aa52084bb015584832f",
+          "left_blob": "9a9409a5744eac5b031d3c4de1b24f62b9881dfe",
+          "right_blob": "e7074cf0ca4db2fab3a434dce0f8ec96c19da537",
+          "left_size": 6575,
+          "right_size": 6602,
+          "kind": "modify_modify"
+        }
+      ],
+      "identical_two_sided_paths": [
+        {
+          "path": "src/com/revature/service/Pbkdf2PasswordHasher.java",
+          "base_blob": "455bdb7b9c2300089b1531cd23151828f8c7ce41",
+          "left_blob": "fe47ab27572523fa1047443c4090ed758891e5c5",
+          "right_blob": "fe47ab27572523fa1047443c4090ed758891e5c5",
+          "left_size": 4231,
+          "right_size": 4231,
+          "kind": "modify_modify"
+        },
+        {
+          "path": "src/test/java/com/revature/service/Pbkdf2PasswordHasherTest.java",
+          "base_blob": "4d3cf97a2418eeee99aa49b38f1e0b6505084f37",
+          "left_blob": "ceec0a5db502d597b5626775bdc6463194b9703e",
+          "right_blob": "ceec0a5db502d597b5626775bdc6463194b9703e",
+          "left_size": 2185,
+          "right_size": 2185,
+          "kind": "modify_modify"
+        }
+      ],
+      "distinct_count": 7,
+      "identical_count": 2,
+      "notes": "Exact three-way Git blob screening. Distinct final blobs do not establish textual merge conflicts; requires local git merge-tree or merge rehearsal."
+    },
+    {
+      "id": "SHORT_TO_CANDIDATE",
+      "base_ref": "ad8d03574c7f048b236c9d24f0c03ac54dffcbd7",
+      "left_ref": "086fbf91294f74fe4bd967256498ef94e92c501a",
+      "right_ref": "0cbad314956ad1d36542d30afa6519a1bbfecdce",
+      "distinct_two_sided_paths": [
+        {
+          "path": ".github/workflows/maven-ci.yml",
+          "base_blob": "a0d74e7a93abea3a7d3967733313c81ad7c64235",
+          "left_blob": "d3de49119969a1a769c6969ce40e6554880953c1",
+          "right_blob": "093bc0e8fad0c85b9c74c864f1ba4021c0467667",
+          "left_size": 2464,
+          "right_size": 8986,
+          "kind": "modify_modify"
+        },
+        {
+          "path": "src/com/revature/cardealer/CarDealership.java",
+          "base_blob": "22ab74f28325b0c2bd0e93cd8ef1317a7579d109",
+          "left_blob": "f0b15b8dfa1556c52188ce8bc4d5fa1b349cca03",
+          "right_blob": "2f5b6b7465aef926fa6871f7af2e8f1d16471a4d",
+          "left_size": 12192,
+          "right_size": 2662,
+          "kind": "modify_modify"
+        },
+        {
+          "path": "src/com/revature/cardealer/Offer.java",
+          "base_blob": "cc7f42abefbf4125ed74c6b912fd367823afec2a",
+          "left_blob": "ca4bc7d880d87462008d77d5bd52a4954f1aeefd",
+          "right_blob": "a08f372ae19f5fe0274281c44973498ba029627e",
+          "left_size": 10194,
+          "right_size": 9709,
+          "kind": "modify_modify"
+        },
+        {
+          "path": "src/com/revature/cardealer/OwnedVehicle.java",
+          "base_blob": null,
+          "left_blob": "0cebddcafa9d36807c9092280e54ac829a600ad8",
+          "right_blob": "4d2c367197b950ce8567a4f461837ffb9e43a811",
+          "left_size": 590,
+          "right_size": 1871,
+          "kind": "add_add"
+        },
+        {
+          "path": "src/com/revature/cardealer/PaymentPlan.java",
+          "base_blob": null,
+          "left_blob": "78cca89cc91dfb8730404de574348e2172759d35",
+          "right_blob": "396aa94f74cac7ebc9b58383fc4f35ac187cbdb1",
+          "left_size": 1348,
+          "right_size": 1293,
+          "kind": "add_add"
+        },
+        {
+          "path": "src/com/revature/service/AdminLoginService.java",
+          "base_blob": "b9c420ffc3c13ac70fb718a0de7d7f8eea56998b",
+          "left_blob": "a475aef593657b1bb75dddd046f26d8a4d0e3986",
+          "right_blob": "26bff842360cfece4de88122eadfe600ab3e667b",
+          "left_size": 765,
+          "right_size": 924,
+          "kind": "modify_modify"
+        },
+        {
+          "path": "src/com/revature/service/CustomerLoginService.java",
+          "base_blob": "4b611206f5db4c864dfadebb0a03456b95df581a",
+          "left_blob": "c3236c28862d3c2f3d7f81fd37edde6b2f8f5c3d",
+          "right_blob": "feec7a90287f1d6e1e09e3e3305a5f4c7a2c0b91",
+          "left_size": 5908,
+          "right_size": 4188,
+          "kind": "modify_modify"
+        },
+        {
+          "path": "src/com/revature/service/EmployeeLoginService.java",
+          "base_blob": "e69c96a189de7c2396023b9e8a68c4f6ee59e5dc",
+          "left_blob": "2cde0c7e47695aba3031509899c4225680afe6a8",
+          "right_blob": "74ffa55d1f82ae77bcbb9706d808ac921c2e0f29",
+          "left_size": 529,
+          "right_size": 696,
+          "kind": "modify_modify"
+        },
+        {
+          "path": "src/com/revature/service/InMemoryUserAccountRepository.java",
+          "base_blob": "5bf61a92bc138c3e1cf4b5514edc8f07584f53cd",
+          "left_blob": "f1af1eaf2b22c00d3e9ad04f3d0319112a7bc0a0",
+          "right_blob": "3b60bbb547a8c28aaff7f4b18ae2e4243f189391",
+          "left_size": 2150,
+          "right_size": 3565,
+          "kind": "modify_modify"
+        },
+        {
+          "path": "src/com/revature/service/UserLoginService.java",
+          "base_blob": "bd5d0fe580b8ad4f4389674c5cccf8b6bc6fa9cf",
+          "left_blob": "ea0cc4ff9e1ef80880655815da4810d9d31aace2",
+          "right_blob": "83c73c7a57e0730c7a29e396393d6697112dd1cb",
+          "left_size": 4656,
+          "right_size": 9194,
+          "kind": "modify_modify"
+        },
+        {
+          "path": "src/test/java/com/revature/cardealer/CarDealershipCharacterizationTest.java",
+          "base_blob": "c1b408a85655070fa9a515de63c6f62143c2be20",
+          "left_blob": "850b5ced6754bf26d0127ae5b0fe1953a05ee9b8",
+          "right_blob": "ee2a5a2d0f59b2a3072b8c9878e4a872a817150f",
+          "left_size": 9143,
+          "right_size": 5560,
+          "kind": "modify_modify"
+        },
+        {
+          "path": "src/test/java/com/revature/cardealer/OfferCharacterizationTest.java",
+          "base_blob": "00e4e18d0d6d3988d5f74b4abd56f60607d628cd",
+          "left_blob": "0e001cc4a661e9f0414c408c6a2375561e200f00",
+          "right_blob": "0019d59a01db0219c32559ec4ae044e0ec557f81",
+          "left_size": 9351,
+          "right_size": 4976,
+          "kind": "modify_modify"
+        },
+        {
+          "path": "src/test/java/com/revature/service/RoleAuthorizationServiceTest.java",
+          "base_blob": "b19d689990a6b8217f86e0136cf056e87b4f313f",
+          "left_blob": "1fb2913ac9a550223d389e443189039c27566ae3",
+          "right_blob": "5ce8c37e2dbc42be98d07967a5efaed26d1cd851",
+          "left_size": 7324,
+          "right_size": 4302,
+          "kind": "modify_modify"
+        },
+        {
+          "path": "src/test/java/com/revature/service/RoleLoginServiceCharacterizationTest.java",
+          "base_blob": "6876239320ea67ad16d0a0ee2752754b5f5aefe1",
+          "left_blob": "cc910ca9c129fe3e967a55b28a579b6a50a398e1",
+          "right_blob": "f4b11edfc2d8eb40a01e2ca3d4259582576b18cd",
+          "left_size": 11585,
+          "right_size": 6260,
+          "kind": "modify_modify"
+        },
+        {
+          "path": "src/test/java/com/revature/service/UserLoginServiceCharacterizationTest.java",
+          "base_blob": "f93f737b797eb43288989aa52084bb015584832f",
+          "left_blob": "44eee24690d606dde2cdc35a76ed8366116e0ccc",
+          "right_blob": "e7074cf0ca4db2fab3a434dce0f8ec96c19da537",
+          "left_size": 7490,
+          "right_size": 6602,
+          "kind": "modify_modify"
+        }
+      ],
+      "identical_two_sided_paths": [
+        {
+          "path": "src/test/java/com/revature/cardealer/PaymentPlanTest.java",
+          "base_blob": null,
+          "left_blob": "a085bddbbabf4dc30c074739fdc57eb016fcdb4e",
+          "right_blob": "a085bddbbabf4dc30c074739fdc57eb016fcdb4e",
+          "left_size": 1752,
+          "right_size": 1752,
+          "kind": "add_add"
+        }
+      ],
+      "distinct_count": 15,
+      "identical_count": 1,
+      "notes": "Exact three-way Git blob screening. Distinct final blobs do not establish textual merge conflicts; requires local git merge-tree or merge rehearsal."
+    }
+  ],
+  "operating_policy": {
+    "no_default_branch_changes": true,
+    "disable_wholesale_merge": true,
+    "no_promotion_without_owner_review": true,
+    "interpretation": "All paths are immutable-Git-blob differences from a common ancestor, not Git conflict hunks. Source file names/content must be preserved by disposition."
+  },
+  "required_next": "Run git merge-tree --write-tree on a verified local Git clone/mirror, then resolve by explicit review. Preserve separately signed source archive."
+}
