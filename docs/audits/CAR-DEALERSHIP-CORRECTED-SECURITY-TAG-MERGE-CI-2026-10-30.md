@@ -42,3 +42,8 @@ Both actual artifact `auto-merge-vs-candidate.txt` files are **empty**: there is
 **Outstanding:** nine short-only file decisions and 15 true short-branch merge conflicts are **reviewed but owner-unapproved**. Historical independent off-GitHub Git archive and restore proof, source licensing, signed canonical Maven destination ADR, production PostgreSQL physical failover and principal boundaries, release rollback and independent QA/DBA/security signoff are still missing. No durable approved merge-commit branch ref was created, and no production or protected branch mutation occurred.
 
 **Release register:** 17 gates, 12 still blocking, `release_authorized=false`, `disposition=NO-GO`. [Machine-readable register](CAR-DEALERSHIP-RELEASE-GATE-REGISTER-2026-10-29.json).
+
+
+## Additional ordinary branch-head CI after the workflow change
+
+The isolated source branch at workflow commit `dc1e596bb9efbe610bb6beedbf09a76184adb59c` additionally passed [normal four-job Maven CI #41004556161](https://github.com/danwiz/project0-cardealership/actions/runs/41004556161): Java 11 and 17 each **346 tests, zero failures/errors/skips**, with both independent Maven diagnostics jobs **SUCCESS**. This is separate from the corrected actual disposable master/modernization merge CI #41004555990, which has both local merge parents and identical validated source-tree SHA. Neither test run grants production or source-integration approval.
