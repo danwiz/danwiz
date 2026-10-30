@@ -80,3 +80,20 @@ The 11 short-only purchase-review tests require a separate signed-off crosswalk 
 **Verified:** [GitHub Actions #40991436945](https://github.com/danwiz/project0-cardealership/actions/runs/40991436945) completed **SUCCESS** at isolated candidate SHA `e4a24a588c8faa92cabb6f4ec0c7ca1b463550a3`. Java **11 and 17 each passed 341 tests, zero failures/errors/skips**, with Maven test and package verify BUILD SUCCESS. Both job logs show **4 non-skipped `SessionDemotionInventoryRegressionTest` cases** (including both new storage-mode tests for authenticated customers, forged administrator actor, wrong-password login, revoked/deleted employee) and **2 `LegacyCredentialApplicationSessionIntegrationTest` cases**.
 
 **Disposition update:** I-02/I-03/I-04 now **COVERED IN ISOLATED CANDIDATE AND CI-VERIFIED**, rather than awaiting test verification. They still need final integrated SHA review, short/long repository decision and independent security acceptance. P-02/P-03/P-04/P-08/P-11 remain partial pending precise test or owner-approved scope decision. This does not justify merging either competing leaf.
+
+
+## Phase 9 — five JDBC purchase-behavior regressions (2026-10-29 ET)
+
+To close the remaining short-only purchase review evidence without importing the best-effort `AuthorizedPurchaseReviewService`, five JUnit cases were added as `src/test/java/com/revature/repository/jdbc/JdbcPurchaseBehaviorParityTest.java` to the **existing isolated integration candidate**, commit `6b332471f8deb6e7308a18c9960c00141b860bf2`.
+
+| Short parity | New direct scenario | Initial status |
+| --- | --- | --- |
+| P-02 | Deleted/revoked verified reviewer cannot approve or inspect pending requests, with unchanged purchase/stock/ownership | IMPLEMENTED — CI pending |
+| P-03 | Authenticated reviewer sees exact persisted pending customer; authenticated customer denied access; immutable view | IMPLEMENTED — CI pending |
+| P-04 | Unknown buyer is rejected at **purchase_requests.customer_name FK insert**, before an orphan request exists; no stock/ownership/payment change | IMPLEMENTED — CI pending (structurally different from the legacy late approval check) |
+| P-08 | Separate earlier committed ownership and payment plan survive a later purchase failure injected after new ownership insertion; rollback preserves original data | IMPLEMENTED — CI pending |
+| P-11 | Authorized reviewer and direct JDBC service reject zero/negative terms and negative request identifier without changing any row | IMPLEMENTED — CI pending |
+
+The tests use a disposable per-case H2 database in PostgreSQL mode, a genuine context-bound verified reviewer, and the real `JdbcPurchaseApprovalService`, `JdbcInventoryRepository`, `DealershipQueryService` and `ReviewPurchaseRequestCommand`. They do **not** prove physical PostgreSQL failover, real production principals, or equivalence of the original in-memory compensation algorithm. [Java 11/17 CI #40995418505](https://github.com/danwiz/project0-cardealership/actions/runs/40995418505) was **in progress** when the evidence register was updated. Leave dispositions pending until exact-head logs show all five tests executed, 0 skipped/failures.
+
+**No default-branch merge, competing short-branch edit, new pull request, production access, release, or deployed migration.**
