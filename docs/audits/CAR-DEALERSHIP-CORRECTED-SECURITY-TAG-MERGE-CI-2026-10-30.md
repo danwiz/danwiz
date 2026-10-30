@@ -64,3 +64,21 @@ A zero-test pass, lowercase historical `security` tag, or additional/missing met
 **Recurring protection:** A second change to the isolated candidate's normal `.github/workflows/maven-ci.yml` at `6802dadc7e68e663d3945c5f4d38417617978132` adds the same exact-name XML assertion on each Java matrix job, while copying full-suite Surefire reports before the filtered rerun to avoid overwriting the evidence of 346 original tests. [Normal CI #41017295257](https://github.com/danwiz/project0-cardealership/actions/runs/41017295257) was **running at this checkpoint**; its success **must be verified independently** before marking the new standard workflow gate accepted.
 
 **Scope and governance unchanged:** this is isolated CI configuration and a temporary two-parent merge; it is not a release, default-branch merge, approved short-branch source disposition or production principal/failover proof.
+
+
+## Phase 15 final recurring CI acceptance — 2026-10-30 ET
+
+The previously pending **normal** Maven workflow now also passed at exact isolated branch SHA `6802dadc7e68e663d3945c5f4d38417617978132`: [Actions #41017295257](https://github.com/danwiz/project0-cardealership/actions/runs/41017295257), **COMPLETED SUCCESS** with all **four** jobs.
+
+| Java job | Complete unfiltered suite | Exact uppercase `SECURITY` filter | Maven result |
+| --- | --- | --- | --- |
+| Java 11 | **346 tests, 0 failed/error/skipped** | **Exactly 2 expected tests, 0 failed/error/skipped** | **BUILD SUCCESS** |
+| Java 17 | **346 tests, 0 failed/error/skipped** | **Exactly 2 expected tests, 0 failed/error/skipped** | **BUILD SUCCESS** |
+| Diagnostics Java 11 | — | Log artifact retrieved | **SUCCESS** |
+| Diagnostics Java 17 | — | Log artifact retrieved | **SUCCESS** |
+
+The standard workflow copies `target/surefire-reports` to `ci-full-suite-reports` **before** rerunning the filtered suite; the `surefire-reports-java-11` and `surefire-reports-java-17` Actions artifacts contain the original full-suite XML, not the overwritten two-test view. The filter is `-Dgroups=SECURITY -Dtest=UserLoginServiceCharacterizationTest -DfailIfNoTests=true`. Python parses the selected Surefire XML and requires exactly `authenticationDoesNotPrintStoredPasswordToStandardOutput` and `registrationStoresAnEncodedPasswordInsteadOfPlaintext`, with tests=2 and zero failures/errors/skips.
+
+**Evidence artifacts:** [Java 11 full reports](https://github.com/danwiz/project0-cardealership/actions/runs/41017295257/artifacts/12960575966), [Java 17 full reports](https://github.com/danwiz/project0-cardealership/actions/runs/41017295257/artifacts/12959349569); separate Maven diagnostics artifacts #12960555897 (JDK11) and #12960655126 (JDK17).
+
+This is an **ongoing branch CI guard**, tested in addition to the [disposable two-parent master merge proof #41016912390](https://github.com/danwiz/project0-cardealership/actions/runs/41016912390). Neither changes the original master branch nor approves the 15 short-branch source conflicts, canonical repo decision or production release. 17 gates, 12 still blocking.
