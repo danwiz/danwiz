@@ -61,3 +61,16 @@ Statuses:
 5. Keep short source files and original logs immutable. Do not cherry-pick best-effort purchase compensation into the JDBC transactional service. No default-branch or Maven-target promotion without signed architecture decision.
 
 **This register is review evidence, not a claim that all 22 behavioral tests have been transferred or that either branch is production-ready.**
+
+
+## Implementation checkpoint — 2026-10-29 ET
+
+A focused test-only parity transfer was committed on the **isolated integration candidate**, not the original short branch:
+- `src/test/java/com/revature/service/SessionDemotionInventoryRegressionTest.java`: added `customerForgeryAndDeletedEmployeeCannotMutateInventoryInMemory` and `customerForgeryAndDeletedEmployeeCannotMutateInventoryJdbc`, extending the existing two demotion tests.
+- For both configured storage modes, an incorrect staff password is rejected, an **actually authenticated customer** cannot add/remove inventory, a **copied username/role/password hash/session revision** cannot forge an administrator session, a legitimate staff member can add inventory, and **deleting** that employee then prevents further add/remove mutation without altering listing count.
+- These tests directly address the earlier **I-02/I-03/I-04 partial gaps**. They are not copies of `AuthorizedInventoryService`; they use the real `ManageInventoryCommand` and `ConfiguredDomainAdapter`.
+- Exact branch head at implementation `e4a24a588c8faa92cabb6f4ec0c7ca1b463550a3`. [Java 11/17 CI #40991436945](https://github.com/danwiz/project0-cardealership/actions/runs/40991436945) was **queued at this checkpoint**; classify I-02/I-03/I-04 as **IMPLEMENTED, AWAITING CI** until exact-head logs confirm.
+
+The earlier application-session bridge (separate opt-in legacy credential upgrade followed by normal context-bound login) passed [CI #40991023039](https://github.com/danwiz/project0-cardealership/actions/runs/40991023039), exact head `768e9998b7ea9477ebfa8a8fe22d2699a98b3c91`: **339 tests on both Java 11 and Java 17**, zero failures/errors/skips, including two non-skipped `LegacyCredentialApplicationSessionIntegrationTest` cases.
+
+The 11 short-only purchase-review tests require a separate signed-off crosswalk for P-02/P-03/P-04/P-08/P-11. The old best-effort in-memory compensation algorithm is not approved for transplant into the JDBC transaction writer. No PR merge, default-branch change, production SQL, credential migration or release.
