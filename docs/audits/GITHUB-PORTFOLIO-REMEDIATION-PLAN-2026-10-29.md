@@ -147,3 +147,18 @@ Candidate behavior: application save/load commands, persistence adapter and cont
 **Evidence:** immutable commit `d56d9ec76fb12432bab3bc2b875302874f2ee373`, [Maven CI run #40983209417](https://github.com/danwiz/project0-cardealership/actions/runs/40983209417), **COMPLETED SUCCESS** on Java 11 and Java 17 with **328 tests/job, zero failures/errors/skips**, package `BUILD SUCCESS`. Both logs show `JdbcReviewerRevocationRaceTest` executed and passing, plus `PostgresqlSessionRevisionMigrationTest` executed on disposable PostgreSQL 16. [Issue #89 source and exact-SHA record](https://github.com/danwiz/project0-cardealership/issues/89#issuecomment-6512322181).
 
 **Release decision remains NO-GO:** narrow test coverage is not equivalent to live transaction-process isolation, real lost-COMMIT/failover reconciliation, owner-grant review, full 90-PR dependency integration or independent security approval. Project1 vulnerability verdict still absent. Do not merge, deploy, publish or provision production resources.
+
+
+## Phase 4 actual COMMIT acknowledgment transport fault — 2026-10-29 ET
+
+**Most recent verified working set:** 21 accessible repositories, **32 open issues**, **115 open pull requests**: 91 Dealership, 21 Project1, 2 Toolkit, 1 profile. Earlier snapshots remain historical.
+
+**Verified new draft [#104](https://github.com/danwiz/project0-cardealership/pull/104)**, stacked on #103, exact commit `490f935049005dfe5c7e2871d92ec02c4ba3a5e5`. [Maven CI run #40984776835](https://github.com/danwiz/project0-cardealership/actions/runs/40984776835) **completed SUCCESS**. Java 11 and Java 17 each passed **329 tests, zero failures/errors/skips**, including `PostgresqlCommitAckTransportLossTest` executed (not skipped) and both test and package verification BUILD SUCCESS.
+
+Unlike the earlier injected 08006 exception, this CI-only test uses an **actual ephemeral TCP proxy** to relay PostgreSQL 16 connection bytes: it forwards COMMIT to the server, **observes backend idle ReadyForQuery**, drops the completion acknowledgment, and cuts the client connection. JDBC must report the outcome **uncertain without automatic replay**. Independent direct PostgreSQL readback confirms one ACCEPTED request, one stock decrement, exactly one ownership and one payment plan; a deliberate same-request replay *after independent readback* remains idempotent. PostgreSQL SSL is deliberately disabled **only** on the disposable fixture proxy, never proposed for production.
+
+This **does not** validate PostgreSQL primary crash/failover, packet loss before COMMIT reaches the server, in-flight backend termination, standby/replica-lag reconciliation, or integration of the separately permissioned SQL permit/receipt function into an authenticated production runtime. These are explicit P0 **NO-GO** gates.
+
+**New detailed evidence and acceptance matrix:** [POSTGRESQL-PURCHASE-FAILURE-MODE-ACCEPTANCE-MATRIX-2026-10-29.md](POSTGRESQL-PURCHASE-FAILURE-MODE-ACCEPTANCE-MATRIX-2026-10-29.md). [#89 exact-head evidence](https://github.com/danwiz/project0-cardealership/issues/89#issuecomment-6512539039) and [#85 dependency tracker](https://github.com/danwiz/project0-cardealership/issues/85#issuecomment-6512539914).
+
+No production DDL, service provisioning, deployment, main/master merge, release publication, or historical artifact rewrite. Draft PR #104 remains open and unmerged.
