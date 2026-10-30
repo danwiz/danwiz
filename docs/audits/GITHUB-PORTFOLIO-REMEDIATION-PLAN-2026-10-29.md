@@ -162,3 +162,18 @@ This **does not** validate PostgreSQL primary crash/failover, packet loss before
 **New detailed evidence and acceptance matrix:** [POSTGRESQL-PURCHASE-FAILURE-MODE-ACCEPTANCE-MATRIX-2026-10-29.md](POSTGRESQL-PURCHASE-FAILURE-MODE-ACCEPTANCE-MATRIX-2026-10-29.md). [#89 exact-head evidence](https://github.com/danwiz/project0-cardealership/issues/89#issuecomment-6512539039) and [#85 dependency tracker](https://github.com/danwiz/project0-cardealership/issues/85#issuecomment-6512539914).
 
 No production DDL, service provisioning, deployment, main/master merge, release publication, or historical artifact rewrite. Draft PR #104 remains open and unmerged.
+
+
+## Phase 5 TX-05 real pre-COMMIT transport failure — October 29, 2026 ET
+
+**No new PRs:** extended the existing, still-draft/unmerged [Dealership PR #104](https://github.com/danwiz/project0-cardealership/pull/104). **Current confirmed totals:** 21 accessible repositories; 32 open issues; **115 open PRs** (91 Dealership, 21 Project1, 2 Toolkit, 1 profile). Counts are checkpoint-specific.
+
+**Exact head `45eccdc73ce36d4298326498a3603e2363251fd6`**, [GitHub Actions #40985413694](https://github.com/danwiz/project0-cardealership/actions/runs/40985413694) **completed SUCCESS**, Java 11 and 17 with **330 tests per job, zero failures/errors/skips**, full Maven package verification. Both job logs explicitly show `PostgresqlCommitAckTransportLossTest`: **two executed cases** (test and verify phases, per Java job), none skipped.
+
+- **TX-04 after server COMMIT completion**: CI TCP proxy forwards actual COMMIT, sees server idle ReadyForQuery, drops the acknowledgment before the client receives it; client reports uncertain transaction, a separate PostgreSQL 16 connection confirms exactly one fully committed purchase.
+- **TX-05 before PostgreSQL receives COMMIT**: proxy cuts both TCP sockets **without forwarding the outbound COMMIT command**; client reports unknown transport outcome, independent readback confirms request still PENDING, stock unchanged (2), zero ownership/payment plans and no implicit retry. This demonstrates rollback in the isolated no-competing-writer test; it does not run the separate SQL permit receipt API or independently prove a production `NOT_CONFIRMED` receipt.
+- Both cases are disposable CI-only (strict environment guard, random schema, transient localhost relay, intentionally plaintext proxy for wire observation). No production TLS bypass or credentials.
+
+**Remaining P0 NO-GO**: fault during in-flight backend COMMIT, PostgreSQL primary crash/standby promotion and replica lag, production issuer/writer/reconciler authentication and isolated permissions, payment ledger/audit validation, cross-branch #85 reconciliation and independent DBA/SRE/security review. [Updated failure-mode acceptance matrix](POSTGRESQL-PURCHASE-FAILURE-MODE-ACCEPTANCE-MATRIX-2026-10-29.md); [issue #89 evidence](https://github.com/danwiz/project0-cardealership/issues/89#issuecomment-6512619677).
+
+No default-branch merges, production SQL/secret changes, external provisioning, deployments or releases. The audit PR itself remains draft.
