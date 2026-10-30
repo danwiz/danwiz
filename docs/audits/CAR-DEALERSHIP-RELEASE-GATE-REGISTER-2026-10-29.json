@@ -345,8 +345,8 @@
     "approval_effect": "None. G02 remains blocking until owner signs explicit short-only and conflict resolutions."
   },
   "latest_normal_candidate_ci": {
-    "run": "https://github.com/danwiz/project0-cardealership/actions/runs/41017295257",
-    "head_sha": "6802dadc7e68e663d3945c5f4d38417617978132",
+    "run": "https://github.com/danwiz/project0-cardealership/actions/runs/41047811529",
+    "head_sha": "6db63674d0ab4ddfa93470d3ff38c98695dbf122",
     "conclusion": "success",
     "java11_tests": 346,
     "java17_tests": 346,
@@ -355,8 +355,7 @@
     "skipped": 0,
     "diagnostics_jobs": "both successful",
     "security_tag_filtered_tests_per_jdk": 2,
-    "full_suite_report_artifacts_preserved": true,
-    "scope": "isolated candidate workflow, not a protected-master promotion"
+    "scope": "new archive-workflow commit on isolated candidate branch, not a published master/short merged ref"
   },
   "junit_tag_selection": {
     "status": "VERIFIED_ON_DISPOSABLE_MERGE_AND_NORMAL_FOUR_JOB_CI",
@@ -435,7 +434,8 @@
       "No Git LFS object provenance",
       "No accepted author/license review",
       "No verified operational retention or recovery rotation policy"
-    ]
+    ],
+    "current_candidate_maven_ci": "https://github.com/danwiz/project0-cardealership/actions/runs/41047811529"
   },
   "local_three_ancestry_rehearsal": {
     "state": "LOCAL_ONLY_ALL_THREE_GIT_BRANCH_HISTORIES_PRESERVED_TREE_EQUALS_TESTED_CANDIDATE",
