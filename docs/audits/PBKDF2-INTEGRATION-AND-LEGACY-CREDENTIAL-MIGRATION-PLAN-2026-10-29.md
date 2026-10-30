@@ -74,7 +74,7 @@ On the **isolated integration-candidate branch only** (`security/integration-can
 - `UserLoginService.authenticate`: tries the existing strict `Pbkdf2PasswordHasher` first. Only an explicitly injected migrator may verify a historical account. Upon successful legacy verification it generates a current strict 600k hash, uses `updateCredentialIfCurrent` CAS, reloads the stored account and checks its new hash/role and rotated `sessionRevision` **before** returning an authenticated account. A stale CAS, wrong password, invalid encoding or missing migrator yields no login, not a downgrade.
 - `LegacyPbkdf2CredentialUpgradeTest`: exact historical hash rejected by default; opt-in in-memory and JDBC/H2 successful migration; wrong-password denial without writes; malformed/giant/out-of-range work factors rejected; CAS conflict denied. The tests use synthetic CI-only credentials, not real customer data.
 - The previously verified strict-master parity at SHA `2ebcebb62b7668f5e9c89393726e183c4eb8abe2` passed **331 tests each on Java 11 and 17** in [CI #40986769490](https://github.com/danwiz/project0-cardealership/actions/runs/40986769490), zero fail/error/skip, including `Pbkdf2PasswordHasherTest` four non-skipped tests.
-- The migration implementation's exact head `eadc05748a1c0481d16bf97f3edeebc086170d94` has CI [#40987971029](https://github.com/danwiz/project0-cardealership/actions/runs/40987971029) **pending when this note was authored**; **do not mark as passed until both job logs confirm the new tests**.
+- The migration implementation's exact head `eadc05748a1c0481d16bf97f3edeebc086170d94` has CI [#40987971029](https://github.com/danwiz/project0-cardealership/actions/runs/40987971029) **COMPLETED SUCCESS**: Java 11 and Java 17 each **337 tests with 0 failures, 0 errors, 0 skips**; both job logs explicitly show **6 non-skipped `LegacyPbkdf2CredentialUpgradeTest` cases** and 4 strict PBKDF2 tests, plus the 2 PostgreSQL COMMIT transport tests. Both test and package verification report `BUILD SUCCESS`.
 
 ### Explicitly still missing
 
@@ -84,3 +84,12 @@ On the **isolated integration-candidate branch only** (`security/integration-can
 4. Migration window expiry, special handling for restored database backups and account rollback, and production-safe failure management. No production queries or write actions were executed.
 
 **Release stays NO-GO until exact-SHA CI, authenticated runtime integration and migration/rollback controls pass independent review.**
+
+
+## 6. Exact-head CI verified migration candidate — 2026-10-29 ET
+
+[GitHub Actions #40987971029](https://github.com/danwiz/project0-cardealership/actions/runs/40987971029) completed **SUCCESS** for exact head `eadc05748a1c0481d16bf97f3edeebc086170d94`. **337 tests per Java version (11 and 17), zero failures/errors/skips**, with Maven package lifecycle successful. The six synthetic migration tests executed in both Java environments; strict work-factor test, PostgreSQL16 session-revision and purchase COMMIT-fault tests remained part of the passing matrix.
+
+**Tested but still not installed:** explicit legacy credential writer capability is opt-in. Normal application composition still denies 120k hashes. The successful migration tests use **synthetic in-memory and H2/JDBC fixture accounts** only; no real account cohort, existing production database or customer password was accessed. An external operator with approved privileges and staged deployment controls must approve the migration mode, rate limiting, workload isolation, audit forwarding and rollback before users can rely on it.
+
+**Next gates:** authenticated application-context session issuance after legacy CAS; limited SQL role and trigger grant checks under PostgreSQL 16; race/cross-process authentication stress; existing-hash inventory; integration of short/master changed paths; owner-approved canonical-repository ADR and independent security signoff. **P0 NO-GO** remains unchanged.
