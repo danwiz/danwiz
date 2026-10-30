@@ -81,9 +81,9 @@
       "owner": "integration maintainer",
       "evidence": "docs/audits/CAR-DEALERSHIP-INTEGRATION-DECISION-REGISTER-2026-10-29.md",
       "blocks_promotion": true,
-      "additional_evidence": "docs/audits/CAR-DEALERSHIP-DISPOSABLE-MASTER-MERGE-CI-2026-10-30.md",
-      "remaining_obligation": "Owner signs explicit six-file master resolution and automatically merged test content; short branch's 15 conflicts and nine short-only paths disposed; create approved durable review commit and re-run exact SHA tests.",
-      "verified_substep": "Actual Git merge-tree 6+15 conflicts; real ephemeral master/candidate two-parent tree identical Java11/17, 346 tests/job zero fail/error/skip"
+      "additional_evidence": "docs/audits/CAR-DEALERSHIP-SHORT-ONLY-SOURCE-DISPOSITION-AND-LOGIN-TAG-REVIEW-2026-10-30.md",
+      "remaining_obligation": "Owner approves nine short-only file dispositions and 15 short-side conflict decisions; independently preserve Git history; prepare durable reviewed source integration and exact-final-SHA CI.",
+      "verified_substep": "Actual Git merges executed in disposable CI: 6 master conflicts plus explicit seventh security-tagged auto-merge fix; final corrected merged tree exactly equals validated candidate tree and passed 346 tests on both JDK 11 and 17."
     },
     {
       "id": "G03",
@@ -259,8 +259,8 @@
   },
   "disposable_master_integration": {
     "capture_date_et": "2026-10-30",
-    "status": "EPHEMERAL_MASTER_CANDIDATE_MERGE_PASSED_JAVA11_17_PG16",
-    "evidence": "docs/audits/CAR-DEALERSHIP-DISPOSABLE-MASTER-MERGE-CI-2026-10-30.md",
+    "status": "CORRECTED_MASTER_MERGE_PRESERVES_CANDIDATE_TREE_PASSED_JDK11_17",
+    "evidence": "docs/audits/CAR-DEALERSHIP-SHORT-ONLY-SOURCE-DISPOSITION-AND-LOGIN-TAG-REVIEW-2026-10-30.md",
     "workflow_run": "https://github.com/danwiz/project0-cardealership/actions/runs/41002545989",
     "workflow_commit": "755a46aef24c9ea8a254e958e0a7dc8a9d76e45b",
     "protected_master_sha": "90741d3abe51d9cc002aaeb1dacae27b933fba10",
@@ -295,6 +295,49 @@
     "one_automerged_test_path": "src/test/java/com/revature/service/UserLoginServiceCharacterizationTest.java",
     "remote_merge_or_pushed_commit": false,
     "exact_final_review_sha_available_as_remote_ref": false,
-    "approval_effect": "None. G02 remains blocking for owner review, short-branch disposition and final approved source/destination, despite reproducible executable master ancestry."
+    "approval_effect": "None. G02 remains blocking; no complete short source ancestry or owner-signed final integration.",
+    "latest_workflow_run": "https://github.com/danwiz/project0-cardealership/actions/runs/41004555990",
+    "latest_workflow_commit": "dc1e596bb9efbe610bb6beedbf09a76184adb59c",
+    "corrected_tree_sha": "c2887034b4ef819f1d0429a25a024c6a1acb35ac",
+    "source_candidate_tree_sha": "c2887034b4ef819f1d0429a25a024c6a1acb35ac",
+    "corrected_auto_merge_test": "src/test/java/com/revature/service/UserLoginServiceCharacterizationTest.java",
+    "corrected_auto_merge_test_blob": "e7074cf0ca4db2fab3a434dce0f8ec96c19da537",
+    "correction_reason": "Avoid lowercased @Tag annotations inherited from master while preserving fail-closed unauthenticatedDeletionFailsClosed test.",
+    "corrected_java11": {
+      "tests": 346,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "conclusion": "success",
+      "artifact_id": 12954856814,
+      "artifact_zip_sha256": "3ccd110e7124555c26643fe002e362f4bb407ea219c355655587fa6e7a95530c"
+    },
+    "corrected_java17": {
+      "tests": 346,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "conclusion": "success",
+      "artifact_id": 12954549007,
+      "artifact_zip_sha256": "ca72a8338fb64eafe04bc7724bdb307ffe86bea343da13903becd219b19b3c73"
+    }
+  },
+  "short_only_source_disposition": {
+    "reviewed_et": "2026-10-30",
+    "status": "NINE_PATHS_CLASSIFIED_OWNER_APPROVAL_OUTSTANDING",
+    "short_ref": "086fbf91294f74fe4bd967256498ef94e92c501a",
+    "short_only_paths": 9,
+    "artifacts": {
+      "design_documents": 2,
+      "legacy_service_and_port_files": 4,
+      "historical_test_suites": 3
+    },
+    "historical_test_cases_mapped": 22,
+    "original_source_preserved": true,
+    "path_disposition_approved": false,
+    "source_register": "docs/audits/CAR-DEALERSHIP-SHORT-ONLY-SOURCE-DISPOSITION-AND-LOGIN-TAG-REVIEW-2026-10-30.md",
+    "short_merge_completed": false,
+    "short_actual_merge_conflicts": 15,
+    "approval_effect": "None. G02 remains blocking until owner signs explicit short-only and conflict resolutions."
   }
 }
