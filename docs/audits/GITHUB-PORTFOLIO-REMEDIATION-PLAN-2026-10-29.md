@@ -220,3 +220,18 @@ The parity candidate retains **exact `master`** PBKDF2 implementation and tests 
 New direct command regressions transfer short branch I-02/I-03/I-04 by behavior: signed-in customer denied inventory mutation; copied admin/role/encoded-hash/session revision denied; wrong password rejected; deleted employee session denied without inventory change, in both memory and JDBC/H2 modes. [Behavioral parity register](CAR-DEALERSHIP-SHORT-BRANCH-BEHAVIORAL-PARITY-2026-10-29.md) updated to mark those test gaps **CI verified on isolated candidate**, not accepted for release.
 
 **Outstanding**: short purchase-test parity P-02/P-03/P-04/P-08/P-11; exact final integrated SHA with master/short branch conflict resolution; canonical repository ADR; authenticated SQL issuer/writer/reconciler; PostgreSQL failover; Project1 vulnerability verdict; owner/DBA/security signoff. These remain P0 NO-GO. No new PR, no main/master merge, no production DDL, deployment, credential migration or release.
+
+
+## Phase 9 — five remaining short-branch purchase-review parity tests (2026-10-29 ET)
+
+Continuing from the exact-head **341-test** Java 11/17 CI success on `e4a24a588c8faa92cabb6f4ec0c7ca1b463550a3`, five targeted **test-only** regressions were added to the **same isolated integration branch** at `6b332471f8deb6e7308a18c9960c00141b860bf2`:
+
+- `JdbcPurchaseBehaviorParityTest.revokedReviewerCannotApproveOrInspectPendingBuyers`: deleted reviewer denied; no writes.
+- `pendingBuyerProjectionRequiresVerifiedReviewerAndPreservesRequester`: persisted buyer projection, protected immutable staff view.
+- `missingBuyerIsRejectedAtForeignKeyBeforeCreatingAnOrphanRequest`: modern JDBC foreign key blocks invalid request at insertion; original late-approval orphan test is **not** directly applicable.
+- `rolledBackSecondPurchasePreservesPreviouslyCommittedCustomerOwnership`: prior ownership/payment plan survives an injected new-purchase failure after tentative ownership write, with request/stock rollback.
+- `authorizedReviewerCannotCreatePurchasesWithInvalidTerms`: direct and configured command rejects invalid months and negative request identifier with no writes.
+
+**CI pending:** [Maven GitHub Actions #40995418505](https://github.com/danwiz/project0-cardealership/actions/runs/40995418505) testing this exact commit on Java 11 and 17. Do not mark these five cases completed until non-skipped test lines and both job conclusions are verified. [22-case behavioral parity crosswalk](CAR-DEALERSHIP-SHORT-BRANCH-BEHAVIORAL-PARITY-2026-10-29.md) and [issue #85](https://github.com/danwiz/project0-cardealership/issues/85#issuecomment-6513964265) updated.
+
+**Release and integration still NO-GO:** no provenance or canonical Maven repo owner approval, no final resolved master/short integrated candidate, no PostgreSQL failover and production issuer/reconciler or independent security/DBA acceptance. No default-branch merge, new PR, production database, cloud credential, deployment or release.
