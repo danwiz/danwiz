@@ -29,7 +29,8 @@
       "repository": "danwiz/Project0-Cardealership-Maven",
       "sha": "a8dce295b9ab45ca6e896035bb81788bd4aff217"
     },
-    "source_open_draft_prs": 91
+    "source_open_draft_prs": 91,
+    "source_integration_workflow_head": "755a46aef24c9ea8a254e958e0a7dc8a9d76e45b"
   },
   "last_verified_ci": {
     "run": "https://github.com/danwiz/project0-cardealership/actions/runs/40997446982",
@@ -80,9 +81,9 @@
       "owner": "integration maintainer",
       "evidence": "docs/audits/CAR-DEALERSHIP-INTEGRATION-DECISION-REGISTER-2026-10-29.md",
       "blocks_promotion": true,
-      "additional_evidence": "docs/audits/CAR-DEALERSHIP-CONFIRMED-MERGE-TREE-REHEARSAL-2026-10-30.md",
-      "remaining_obligation": "Resolve 6+15 conflicts and additional nonconflicting short-only paths with explicit signed file decisions, then build/test exact final SHA.",
-      "verified_substep": "Actual read-only git merge-tree on pinned full Git history completed; 6 master and 15 short conflicts reported"
+      "additional_evidence": "docs/audits/CAR-DEALERSHIP-DISPOSABLE-MASTER-MERGE-CI-2026-10-30.md",
+      "remaining_obligation": "Owner signs explicit six-file master resolution and automatically merged test content; short branch's 15 conflicts and nine short-only paths disposed; create approved durable review commit and re-run exact SHA tests.",
+      "verified_substep": "Actual Git merge-tree 6+15 conflicts; real ephemeral master/candidate two-parent tree identical Java11/17, 346 tests/job zero fail/error/skip"
     },
     {
       "id": "G03",
@@ -255,5 +256,45 @@
     "source_workflow_commit": "e4b21e123d443079be2ccffd826a62c5d64f0c49",
     "source_git_fsck": "success",
     "resolution_accepted": false
+  },
+  "disposable_master_integration": {
+    "capture_date_et": "2026-10-30",
+    "status": "EPHEMERAL_MASTER_CANDIDATE_MERGE_PASSED_JAVA11_17_PG16",
+    "evidence": "docs/audits/CAR-DEALERSHIP-DISPOSABLE-MASTER-MERGE-CI-2026-10-30.md",
+    "workflow_run": "https://github.com/danwiz/project0-cardealership/actions/runs/41002545989",
+    "workflow_commit": "755a46aef24c9ea8a254e958e0a7dc8a9d76e45b",
+    "protected_master_sha": "90741d3abe51d9cc002aaeb1dacae27b933fba10",
+    "source_candidate_sha": "0cbad314956ad1d36542d30afa6519a1bbfecdce",
+    "verified_tree_sha": "e21385cea6cd9969c3203cb65d739ba71bda04bc",
+    "temporary_runner_commits": {
+      "java11": "01608f7d6aa37d806b0b0aac477b27bcd54894dd",
+      "java17": "9f9e7ca83ba1ff05344b286e4a8ae1f6d126a80c"
+    },
+    "candidate_side_conflicts_resolved_locally": 6,
+    "java11": {
+      "tests": 346,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "conclusion": "success",
+      "artifact_id": 12953144849
+    },
+    "java17": {
+      "tests": 346,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "conclusion": "success",
+      "artifact_id": 12954415227
+    },
+    "introduced_whitespace_warnings": 0,
+    "existing_whitespace_review_paths": [
+      "docs/security/postgresql-writer-epoch-transaction-fence.md",
+      "src/test/java/com/revature/application/TestDecodingAuditSource.java"
+    ],
+    "one_automerged_test_path": "src/test/java/com/revature/service/UserLoginServiceCharacterizationTest.java",
+    "remote_merge_or_pushed_commit": false,
+    "exact_final_review_sha_available_as_remote_ref": false,
+    "approval_effect": "None. G02 remains blocking for owner review, short-branch disposition and final approved source/destination, despite reproducible executable master ancestry."
   }
 }
