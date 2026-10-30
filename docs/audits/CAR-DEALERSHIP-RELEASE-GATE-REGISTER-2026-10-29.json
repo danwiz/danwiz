@@ -320,7 +320,8 @@
       "conclusion": "success",
       "artifact_id": 12954549007,
       "artifact_zip_sha256": "ca72a8338fb64eafe04bc7724bdb307ffe86bea343da13903becd219b19b3c73"
-    }
+    },
+    "normal_candidate_ci": "https://github.com/danwiz/project0-cardealership/actions/runs/41004556161"
   },
   "short_only_source_disposition": {
     "reviewed_et": "2026-10-30",
@@ -339,5 +340,17 @@
     "short_merge_completed": false,
     "short_actual_merge_conflicts": 15,
     "approval_effect": "None. G02 remains blocking until owner signs explicit short-only and conflict resolutions."
+  },
+  "latest_normal_candidate_ci": {
+    "run": "https://github.com/danwiz/project0-cardealership/actions/runs/41004556161",
+    "head_sha": "dc1e596bb9efbe610bb6beedbf09a76184adb59c",
+    "conclusion": "success",
+    "java11_tests": 346,
+    "java17_tests": 346,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "diagnostics_jobs": "both successful",
+    "scope": "isolated candidate with audit workflow updates, not a protected master merge or production build"
   }
 }
