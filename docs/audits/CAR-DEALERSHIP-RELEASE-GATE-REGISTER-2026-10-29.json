@@ -129,8 +129,8 @@
       "owner": "CI maintainer",
       "evidence": "https://github.com/danwiz/project0-cardealership/actions/runs/40997446982",
       "blocks_promotion": false,
-      "tag_filter_proof": "https://github.com/danwiz/project0-cardealership/actions/runs/41016912390",
-      "recurring_tag_filter_state": "CI pending exact workflow SHA"
+      "tag_filter_proof": "https://github.com/danwiz/project0-cardealership/actions/runs/41017295257",
+      "recurring_tag_filter_state": "VERIFIED: #41017295257, 346 suite and two uppercase SECURITY cases/JDK + diagnostics success"
     },
     {
       "id": "G08",
@@ -344,8 +344,8 @@
     "approval_effect": "None. G02 remains blocking until owner signs explicit short-only and conflict resolutions."
   },
   "latest_normal_candidate_ci": {
-    "run": "https://github.com/danwiz/project0-cardealership/actions/runs/41004556161",
-    "head_sha": "dc1e596bb9efbe610bb6beedbf09a76184adb59c",
+    "run": "https://github.com/danwiz/project0-cardealership/actions/runs/41017295257",
+    "head_sha": "6802dadc7e68e663d3945c5f4d38417617978132",
     "conclusion": "success",
     "java11_tests": 346,
     "java17_tests": 346,
@@ -353,10 +353,12 @@
     "errors": 0,
     "skipped": 0,
     "diagnostics_jobs": "both successful",
-    "scope": "isolated candidate with audit workflow updates, not a protected master merge or production build"
+    "security_tag_filtered_tests_per_jdk": 2,
+    "full_suite_report_artifacts_preserved": true,
+    "scope": "isolated candidate workflow, not a protected-master promotion"
   },
   "junit_tag_selection": {
-    "status": "VERIFIED_ON_DISPOSABLE_MERGE_STANDARD_CI_PENDING",
+    "status": "VERIFIED_ON_DISPOSABLE_MERGE_AND_NORMAL_FOUR_JOB_CI",
     "purpose": "prevent silent regression of uppercase SECURITY filter following master auto-merge",
     "isolated_merge_run": "https://github.com/danwiz/project0-cardealership/actions/runs/41016912390",
     "isolated_merge_workflow_head": "621e525aab8f57b6422c1f7e66d0d46f725b0713",
@@ -383,7 +385,29 @@
     ],
     "recurring_workflow_commit": "6802dadc7e68e663d3945c5f4d38417617978132",
     "recurring_ci_run": "https://github.com/danwiz/project0-cardealership/actions/runs/41017295257",
-    "recurring_ci_status": "in_progress_at_checkpoint",
-    "accepted_release_gate_impact": "None; G07 candidate CI source security verified but release remains NO-GO"
+    "recurring_ci_status": "completed_success",
+    "accepted_release_gate_impact": "None; G07 candidate CI source security verified but release remains NO-GO",
+    "recurring_ci_java11": {
+      "full_tests": 346,
+      "security_filtered_tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "job_conclusion": "success",
+      "full_suite_report_artifact_id": 12960575966
+    },
+    "recurring_ci_java17": {
+      "full_tests": 346,
+      "security_filtered_tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "job_conclusion": "success",
+      "full_suite_report_artifact_id": 12959349569
+    },
+    "recurring_ci_diagnostics": {
+      "java11": "success",
+      "java17": "success"
+    }
   }
 }
