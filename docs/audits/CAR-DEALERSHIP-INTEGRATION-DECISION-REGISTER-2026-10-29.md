@@ -148,3 +148,12 @@ New long head [draft #104](https://github.com/danwiz/project0-cardealership/pull
 7. **Approve promotion** only with independent DBA/security/maintainer review, correct provenance, explicit rollback strategy and signed acceptance record.
 
 **Current integrated-release decision: NO-GO.** No branch merges, rewrites, default-branch changes or releases performed by this register.
+
+## Phase 10 — master-side reconciliation checkpoint (2026-10-29 ET)
+
+- **Actual protected baseline:** `master` commit `90741d3abe51d9cc002aaeb1dacae27b933fba10`, captured with [exact nine-file blob and original-test manifest](CAR-DEALERSHIP-MASTER-BASELINE-PRESERVATION-MANIFEST-2026-10-29.md). Historical tests from six changed `master` characterization suites document deliberately defective legacy behavior and should be treated as immutable **pre-remediation evidence**, not pasted into modern tests expecting those bugs.
+- **Two files now byte-equivalent to master:** `Pbkdf2PasswordHasher.java` blob `fe47ab27572523fa1047443c4090ed758891e5c5` and `Pbkdf2PasswordHasherTest.java` blob `ceec0a5db502d597b5626775bdc6463194b9703e`. Verified via two independent `fetch_file` reads, not inferred from test counts.
+- **Workflow semantic drift resolved on candidate:** the modern `maven-ci.yml` omitted the protected `master` push trigger and master-only diagnostics matrix. These were copied into the existing Java 11/17 + disposable PG16 workflow at isolated candidate commit `0cbad314956ad1d36542d30afa6519a1bbfecdce`, without touching the actual protected `master`. CI [#40997446982](https://github.com/danwiz/project0-cardealership/actions/runs/40997446982) was **not yet complete** when recorded. On completion, inspect both verify jobs and both diagnostics jobs, artifact fetch and test totals before calling this step validated.
+- **No automatic conflict resolution:** 16 `master`-exclusive commits and four short-branch PRs remain history from separate lines. This is a reviewed functional/provenance disposition, **not a Git merge, accepted canonical Maven migration, or authorization to publish**.
+
+**Owner/DBA/security approval and the broader release NO-GO are unchanged.**
