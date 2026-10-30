@@ -1,6 +1,8 @@
 # GitHub portfolio remediation plan — baseline 2026-10-29
 
-**Scope:** 18 repositories; 22 currently open issues in 6 repositories. This is a discovery/control baseline, **not** a declaration of comprehensive source, workflow, or security verification. Do not merge, deploy, archive, or delete historical repositories on the strength of this plan.
+**Original discovery snapshot:** 18 personal repositories and 22 issues in 6 repositories (the counts below describe that earlier report and remain historical).  
+**Reverified 2026-10-29 (ET):** **21 accessible repositories** (18 personally owned, 2 Wisdom Technologies organization-owned, 1 collaborator-owned); **30 open issues across 8 repositories** and **110 open PRs**. Individual repository searches were necessary: an earlier multi-repository search returned only 13 issues in two repositories, thereby omitting 17 open issues from six additional repositories. The 30 total is: Car Dealership 7, Project1 6, profile 7, IT Readiness Toolkit 3, Project Intelligence Agent 2, PRJ-ERM-001 2, CMF-SE 3; other 13 repositories 0. PR distribution: Dealership 86, Project1 21, Toolkit 2, profile 1. **Do not treat original 22-issue sections below as a complete current register.**  
+**P0 integration supplement:** [Car Dealership cross-branch decision register](CAR-DEALERSHIP-INTEGRATION-DECISION-REGISTER-2026-10-29.md) and [integration issue #85](https://github.com/danwiz/project0-cardealership/issues/85). Exact long-vs-short head divergence: 301 vs 109 exclusive commits, with 16 overlapping changed paths; `master` has 16 branch-exclusive commits relative to the long head's common ancestor. Keep both branches draft and unmerged. This is a discovery/control baseline, **not** a declaration of comprehensive source, workflow, or security verification. Do not merge, deploy, archive, or delete historical repositories on the strength of this plan.
 
 ## Repository inventory and lifecycle classification
 
