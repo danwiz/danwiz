@@ -81,3 +81,16 @@ These file choices are **proposals for a future merge resolution**, not complete
 | Production release / schema / issuer-writer trust | **NO-GO** |
 
 **Do not downgrade the main [17-gate release register](CAR-DEALERSHIP-RELEASE-GATE-REGISTER-2026-10-29.json) based on this screening.** Original branches and all draft PRs stay unchanged.
+
+## Phase 13 — Actual GitHub-hosted merge-tree superseding blob-only screen (2026-10-30 ET)
+
+The earlier “BLOCKED HERE” statement describes only this local container, where DNS resolution for github.com still fails. **A network-enabled GitHub Actions runner has since executed the real `git merge-tree --write-tree` operations** on the full pinned Git history. This supersedes the blob-only estimates when reporting confirmed *conflicts*.
+
+[Authoritative run #41001881391](https://github.com/danwiz/project0-cardealership/actions/runs/41001881391) completed **SUCCESS** as a *diagnostic execution*, with `git fsck --full --strict` successful, full `fetch-depth:0` source and no remote push:
+- Protected `master` vs frozen candidate: merge-tree exit **1**, **6 actual content conflicts**, virtual tree `22cbcc6c394c1ff0be28d763b19e89b3df8e6f7c`.
+- Short #84 vs candidate: merge-tree exit **1**, **15 actual conflicts (13 content + 2 add/add)**, virtual tree `7c13e7ac620bdbf1d9302990d017d68dda676429`.
+- The previously blob-different `UserLoginServiceCharacterizationTest.java` automatically merged in the `master` rehearsal; semantic and test review are still necessary.
+- Full [confirmed conflict path register, executed commands and artifact integrity](CAR-DEALERSHIP-CONFIRMED-MERGE-TREE-REHEARSAL-2026-10-30.md).
+- GitHub text artifact ID **12953981471**, SHA-256 `efd649e93fc5d7e33eb1947de742b961125012fdd85e7425050d58f0d376fd3b`; no Git bundle published.
+
+**Remain NO-GO:** no actual conflicts resolved, no parented merged integration commit, no independently stored full Git bundle/restore. G02 diagnostic step is now verified but conflict resolution and signoffs remain blocking; G01 backup still blocks promotion.
