@@ -184,3 +184,11 @@ Decision:                                 **NO-GO**
 ```
 
 **No commands in this runbook were executed against production or protected branches by publishing this document.** Open draft PRs, original artifacts, source `master` and Maven destination `master` remain untouched.
+
+## 10. Phase 12: real Git-object preflight — screened, not merged (2026-10-29 ET)
+
+**New verified evidence:** [Five immutable Git trees + machine-readable three-way blob collisions](CAR-DEALERSHIP-THREE-WAY-BLOB-COLLISION-INVENTORY-2026-10-29.json) and [22-path reviewer triage](CAR-DEALERSHIP-THREE-WAY-COLLISION-TRIAGE-2026-10-29.md). The GitHub API returned `truncated=false` for all five recursive trees. Against common ancestors, **master/candidate has seven differently modified paths and two identically changed paths** (both PBKDF2 files); **short/candidate has 15 different two-sided paths (13 modify/modify, two add/add) and one identical** (PaymentPlanTest). The candidate's `OwnedVehicle` adds durable ownership and contract IDs; `PaymentPlan` is behaviorally comparable but adds serialization support. Preserve the current candidate's stronger model, pending owner review.
+
+**Hard limitation:** A local `git ls-remote` attempt from this environment failed with DNS resolution for github.com. **No actual Git merge-tree was run** and **no full off-GitHub Git bundle was generated or restored**, so G01 and G02 remain open. A [syntax-checked shell helper](tools/rehearse-dealership-source-merge.sh) is committed to this draft audit to do the full mirror, SHA-fenced bundle, checksum/fsck and two local merge-tree drills when executed in a Git-network-enabled environment. It refuses nonempty output and never pushes to remote; its end-to-end live behavior has **not** been tested here.
+
+**Do not interpret the blob overlap counts as Git merge conflict counts.** The reviewed dispositions and machine registry are planning/evidence, not an accepted merge tree. [Release-gate register](CAR-DEALERSHIP-RELEASE-GATE-REGISTER-2026-10-29.json) remains **17 gates, 12 blocking, release_authorized=false, NO-GO**.
