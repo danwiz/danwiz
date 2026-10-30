@@ -80,8 +80,9 @@
       "owner": "integration maintainer",
       "evidence": "docs/audits/CAR-DEALERSHIP-INTEGRATION-DECISION-REGISTER-2026-10-29.md",
       "blocks_promotion": true,
-      "additional_evidence": "docs/audits/CAR-DEALERSHIP-THREE-WAY-BLOB-COLLISION-INVENTORY-2026-10-29.json",
-      "remaining_obligation": "Run actual git merge-tree on full local objects, adjudicate 22 distinct two-sided paths, then review merged final SHA."
+      "additional_evidence": "docs/audits/CAR-DEALERSHIP-CONFIRMED-MERGE-TREE-REHEARSAL-2026-10-30.md",
+      "remaining_obligation": "Resolve 6+15 conflicts and additional nonconflicting short-only paths with explicit signed file decisions, then build/test exact final SHA.",
+      "verified_substep": "Actual read-only git merge-tree on pinned full Git history completed; 6 master and 15 short conflicts reported"
     },
     {
       "id": "G03",
@@ -219,8 +220,8 @@
   ],
   "notes": "VERIFIED_ON_CANDIDATE is not accepted on the future final SHA. Re-query heads and re-run every necessary gate after changes.",
   "git_object_preflight": {
-    "capture_date_et": "2026-10-29",
-    "status": "VERIFIED_BLOB_SCREEN_ONLY",
+    "capture_date_et": "2026-10-30",
+    "status": "ACTUAL_MERGE_TREE_EXECUTED_WITH_CONFLICTS",
     "source_file": "docs/audits/CAR-DEALERSHIP-THREE-WAY-BLOB-COLLISION-INVENTORY-2026-10-29.json",
     "triage": "docs/audits/CAR-DEALERSHIP-THREE-WAY-COLLISION-TRIAGE-2026-10-29.md",
     "local_rehearsal_helper": "docs/audits/tools/rehearse-dealership-source-merge.sh",
@@ -228,17 +229,31 @@
     "master_vs_candidate": {
       "different_two_sided_blob_paths": 7,
       "identical_two_sided_blob_paths": 2,
-      "actual_merge_conflicts_confirmed": false
+      "actual_merge_conflicts_confirmed": true,
+      "actual_conflict_paths": 6,
+      "virtual_merge_tree": "22cbcc6c394c1ff0be28d763b19e89b3df8e6f7c",
+      "git_merge_tree_exit_code": 1
     },
     "short_vs_candidate": {
       "different_two_sided_blob_paths": 15,
       "identical_two_sided_blob_paths": 1,
+      "actual_merge_conflicts_confirmed": true,
+      "actual_conflict_paths": 15,
       "add_add_distinct": 2,
-      "actual_merge_conflicts_confirmed": false
+      "virtual_merge_tree": "7c13e7ac620bdbf1d9302990d017d68dda676429",
+      "git_merge_tree_exit_code": 1
     },
-    "offline_git_clone_attempt": "BLOCKED_DNS_RESOLUTION",
+    "offline_git_clone_attempt": "BLOCKED_DNS_RESOLUTION_IN_LOCAL_EXECUTION_ENVIRONMENT",
     "local_git_bundle_created": false,
-    "full_git_merge_tree_executed": false,
-    "approval_effect": "NONE. Gate G01/G02 remain blocking."
+    "full_git_merge_tree_executed": true,
+    "approval_effect": "G02 actual diagnostic merge-tree step verified, but source conflict resolution/owner signoff remain blocking. G01 off-GitHub bundle remains open.",
+    "github_actions_run": "https://github.com/danwiz/project0-cardealership/actions/runs/41001881391",
+    "artifact_id": 12953981471,
+    "artifact_zip_sha256": "efd649e93fc5d7e33eb1947de742b961125012fdd85e7425050d58f0d376fd3b",
+    "report": "docs/audits/CAR-DEALERSHIP-CONFIRMED-MERGE-TREE-REHEARSAL-2026-10-30.md",
+    "source_candidate_compared": "0cbad314956ad1d36542d30afa6519a1bbfecdce",
+    "source_workflow_commit": "e4b21e123d443079be2ccffd826a62c5d64f0c49",
+    "source_git_fsck": "success",
+    "resolution_accepted": false
   }
 }
